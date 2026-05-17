@@ -94,8 +94,8 @@ describe('Generator: base output', () => {
       'src/shared/pipes/parse-uuid.pipe.ts',
       'src/shared/utils/retry.util.ts',
       'src/infrastructure/database/entities/.gitkeep',
-      'tests/unit/.gitkeep',
-      'tests/e2e/.gitkeep',
+      'tests/unit/app.module.spec.ts',
+      'tests/e2e/app.e2e-spec.ts',
     ];
 
     for (const file of expectedFiles) {

@@ -6,7 +6,7 @@ Packaging and deploying NestJS applications to various targets.
 
 | Recipe | Target                                                        | Recipe README                                               |
 | ------ | ------------------------------------------------------------- | ----------------------------------------------------------- |
-| Deploy | Dockerfile, docker-compose, Kubernetes, Serverless, Terraform | [deploy](../../packages/templates/recipes/deploy/README.md) |
+| Deploy | Dockerfile, docker-compose, Kubernetes, Serverless, Terraform | [deploy](../../templates/recipes/deploy/README.md) |
 
 ## Dockerfile
 

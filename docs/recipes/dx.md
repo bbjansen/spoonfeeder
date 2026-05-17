@@ -6,10 +6,10 @@ Tools and patterns that improve the inner development loop: containers, data see
 
 | Recipe             | Purpose                                                    | Recipe README                                                                       |
 | ------------------ | ---------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| DevContainer       | VS Code dev container with all dependencies pre-configured | [devcontainer](../../packages/templates/recipes/devcontainer/README.md)             |
-| Database Seeding   | Populate databases with development/test data              | [database-seeding](../../packages/templates/recipes/database-seeding/README.md)     |
-| Database Factories | Generate realistic test entities with faker                | [database-factories](../../packages/templates/recipes/database-factories/README.md) |
-| SDK Generation     | Auto-generate typed client SDKs from OpenAPI spec          | [sdk-generation](../../packages/templates/recipes/sdk-generation/README.md)         |
+| DevContainer       | VS Code dev container with all dependencies pre-configured | [devcontainer](../../templates/recipes/devcontainer/README.md)             |
+| Database Seeding   | Populate databases with development/test data              | [database-seeding](../../templates/recipes/database-seeding/README.md)     |
+| Database Factories | Generate realistic test entities with faker                | [database-factories](../../templates/recipes/database-factories/README.md) |
+| SDK Generation     | Auto-generate typed client SDKs from OpenAPI spec          | [sdk-generation](../../templates/recipes/sdk-generation/README.md)         |
 
 ## DevContainer
 

@@ -9,10 +9,6 @@
       "type": "string",
       "description": "Filter by category"
     },
-    "project": {
-      "type": "string",
-      "description": "Target project (for monorepo)"
-    },
     "json": {
       "type": "boolean",
       "default": false,

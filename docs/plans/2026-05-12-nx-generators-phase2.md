@@ -4,7 +4,7 @@
 
 **Goal:** Add ts-morph-based AST transforms to safely modify app.module.ts (add/remove imports and module registrations) and main.ts (insert/remove delimited code blocks), enabling full add-recipe support for all recipe types.
 
-**Architecture:** Two new utility modules (`module-updater.ts` and `main-ts-updater.ts`) live in `packages/spoonfeeder/src/utils/`. They operate on real filesystem paths using ts-morph for type-safe AST manipulation of `app.module.ts`, and delimiter-based string operations for `main.ts` blocks. The `add-recipe` generator from Phase 1 is extended to call these utilities when a recipe defines `moduleImport` or `mainTsBlocks` metadata.
+**Architecture:** Two new utility modules (`module-updater.ts` and `main-ts-updater.ts`) live in `src/utils/`. They operate on real filesystem paths using ts-morph for type-safe AST manipulation of `app.module.ts`, and delimiter-based string operations for `main.ts` blocks. The `add-recipe` generator from Phase 1 is extended to call these utilities when a recipe defines `moduleImport` or `mainTsBlocks` metadata.
 
 **Tech Stack:** ts-morph, @nx/devkit
 
@@ -29,19 +29,19 @@ This is **Phase 2 of 4**:
 
 | File                                                                              | Responsibility                                            |
 | --------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `packages/spoonfeeder/src/utils/module-updater.ts`                                | Add/remove module imports from app.module.ts via ts-morph |
-| `packages/spoonfeeder/src/utils/main-ts-updater.ts`                               | Insert/remove delimited code blocks in main.ts            |
-| `tests/unit/packages/spoonfeeder/utils/module-updater.spec.ts`                    | Unit + snapshot tests for module-updater                  |
-| `tests/unit/packages/spoonfeeder/utils/main-ts-updater.spec.ts`                   | Unit tests for main-ts-updater                            |
-| `tests/unit/packages/spoonfeeder/utils/__snapshots__/module-updater.spec.ts.snap` | Auto-generated snapshot file                              |
+| `src/utils/module-updater.ts`                                | Add/remove module imports from app.module.ts via ts-morph |
+| `src/utils/main-ts-updater.ts`                               | Insert/remove delimited code blocks in main.ts            |
+| `tests/unit/utils/module-updater.spec.ts`                    | Unit + snapshot tests for module-updater                  |
+| `tests/unit/utils/main-ts-updater.spec.ts`                   | Unit tests for main-ts-updater                            |
+| `tests/unit/utils/__snapshots__/module-updater.spec.ts.snap` | Auto-generated snapshot file                              |
 | `tests/integration/spoonfeeder/ast-transforms.integration.spec.ts`                | Integration test: add swagger, verify build               |
 
 ### Files to Modify
 
 | File                                                          | Change                                             |
 | ------------------------------------------------------------- | -------------------------------------------------- |
-| `packages/spoonfeeder/package.json`                           | Add `ts-morph` dependency                          |
-| `packages/spoonfeeder/src/generators/add-recipe/generator.ts` | Integrate module-updater and main-ts-updater calls |
+| `package.json`                           | Add `ts-morph` dependency                          |
+| `src/generators/add-recipe/generator.ts` | Integrate module-updater and main-ts-updater calls |
 
 ---
 
@@ -49,7 +49,7 @@ This is **Phase 2 of 4**:
 
 **Files:**
 
-- Modify: `packages/spoonfeeder/package.json`
+- Modify: `package.json`
 
 - [ ] **Step 1: Install ts-morph with exact version**
 
@@ -60,7 +60,7 @@ pnpm --filter spoonfeeder add -E ts-morph
 - [ ] **Step 2: Verify the dependency was added with an exact version (no ^ or ~)**
 
 ```bash
-grep '"ts-morph"' packages/spoonfeeder/package.json
+grep '"ts-morph"' package.json
 ```
 
 Expected: `"ts-morph": "X.Y.Z"` (no caret or tilde prefix).
@@ -76,7 +76,7 @@ Expected: compiles with no errors.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add packages/spoonfeeder/package.json pnpm-lock.yaml
+git add package.json pnpm-lock.yaml
 git commit -m "chore(spoonfeeder): add ts-morph dependency for ast transforms"
 ```
 
@@ -86,12 +86,12 @@ git commit -m "chore(spoonfeeder): add ts-morph dependency for ast transforms"
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/utils/module-updater.ts`
-- Create: `tests/unit/packages/spoonfeeder/utils/module-updater.spec.ts`
+- Create: `src/utils/module-updater.ts`
+- Create: `tests/unit/utils/module-updater.spec.ts`
 
 - [ ] **Step 1: Write the failing tests**
 
-Create `tests/unit/packages/spoonfeeder/utils/module-updater.spec.ts`:
+Create `tests/unit/utils/module-updater.spec.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -276,7 +276,7 @@ Expected: FAIL (module not found).
 
 - [ ] **Step 3: Implement module-updater.ts**
 
-Create `packages/spoonfeeder/src/utils/module-updater.ts`:
+Create `src/utils/module-updater.ts`:
 
 ```typescript
 import { Project, SyntaxKind, type ObjectLiteralExpression } from 'ts-morph';
@@ -395,7 +395,7 @@ Expected: 9 tests pass (5 addModuleImport, 3 removeModuleImport, 3 snapshots aut
 - [ ] **Step 5: Review the generated snapshots**
 
 ```bash
-cat tests/unit/packages/spoonfeeder/utils/__snapshots__/module-updater.spec.ts.snap
+cat tests/unit/utils/__snapshots__/module-updater.spec.ts.snap
 ```
 
 Verify the snapshots contain:
@@ -407,7 +407,7 @@ Verify the snapshots contain:
 - [ ] **Step 6: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/utils/module-updater.ts tests/unit/packages/spoonfeeder/utils/module-updater.spec.ts tests/unit/packages/spoonfeeder/utils/__snapshots__/
+git add src/utils/module-updater.ts tests/unit/utils/module-updater.spec.ts tests/unit/utils/__snapshots__/
 git commit -m "feat(spoonfeeder): add module-updater with ts-morph ast transforms"
 ```
 
@@ -417,12 +417,12 @@ git commit -m "feat(spoonfeeder): add module-updater with ts-morph ast transform
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/utils/main-ts-updater.ts`
-- Create: `tests/unit/packages/spoonfeeder/utils/main-ts-updater.spec.ts`
+- Create: `src/utils/main-ts-updater.ts`
+- Create: `tests/unit/utils/main-ts-updater.spec.ts`
 
 - [ ] **Step 1: Write the failing tests**
 
-Create `tests/unit/packages/spoonfeeder/utils/main-ts-updater.spec.ts`:
+Create `tests/unit/utils/main-ts-updater.spec.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -654,7 +654,7 @@ Expected: FAIL (module not found).
 
 - [ ] **Step 3: Implement main-ts-updater.ts**
 
-Create `packages/spoonfeeder/src/utils/main-ts-updater.ts`:
+Create `src/utils/main-ts-updater.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -814,7 +814,7 @@ Expected: 8 tests pass (4 insertBlock, 3 removeBlock, 1 snapshot).
 - [ ] **Step 5: Review the generated snapshot**
 
 ```bash
-cat tests/unit/packages/spoonfeeder/utils/__snapshots__/main-ts-updater.spec.ts.snap
+cat tests/unit/utils/__snapshots__/main-ts-updater.spec.ts.snap
 ```
 
 Verify the snapshot shows:
@@ -826,7 +826,7 @@ Verify the snapshot shows:
 - [ ] **Step 6: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/utils/main-ts-updater.ts tests/unit/packages/spoonfeeder/utils/main-ts-updater.spec.ts tests/unit/packages/spoonfeeder/utils/__snapshots__/
+git add src/utils/main-ts-updater.ts tests/unit/utils/main-ts-updater.spec.ts tests/unit/utils/__snapshots__/
 git commit -m "feat(spoonfeeder): add main-ts-updater with delimited block insertion/removal"
 ```
 
@@ -836,21 +836,21 @@ git commit -m "feat(spoonfeeder): add main-ts-updater with delimited block inser
 
 **Files:**
 
-- Modify: `packages/spoonfeeder/src/generators/add-recipe/generator.ts`
+- Modify: `src/generators/add-recipe/generator.ts`
 
 This task extends the Phase 1 `add-recipe` generator to call `addModuleImport()` when a recipe defines `moduleImport` metadata, and `insertBlock()` when a recipe defines `mainTsBlocks`.
 
 - [ ] **Step 1: Read the current generator.ts to understand its structure**
 
 ```bash
-cat packages/spoonfeeder/src/generators/add-recipe/generator.ts
+cat src/generators/add-recipe/generator.ts
 ```
 
 Understand where the env var and AI context sections are applied. The AST transforms go between step 2 (template file copying) and step 3 (env vars).
 
 - [ ] **Step 2: Add the module-updater and main-ts-updater imports and calls**
 
-At the top of `packages/spoonfeeder/src/generators/add-recipe/generator.ts`, add the imports:
+At the top of `src/generators/add-recipe/generator.ts`, add the imports:
 
 ```typescript
 import { addModuleImport } from '../../utils/module-updater.js';
@@ -898,7 +898,7 @@ updateJson(tree, manifestPath, (json) => {
 
 - [ ] **Step 3: Update RecipeDefinition type to include moduleImport and mainTsSetup**
 
-In `packages/spoonfeeder/src/types.ts`, add the optional fields to the `RecipeDefinition` interface:
+In `src/types.ts`, add the optional fields to the `RecipeDefinition` interface:
 
 ```typescript
 export interface ModuleImportMeta {
@@ -946,7 +946,7 @@ Expected: all existing tests pass (the new optional fields don't break existing 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/add-recipe/generator.ts packages/spoonfeeder/src/types.ts
+git add src/generators/add-recipe/generator.ts src/types.ts
 git commit -m "feat(spoonfeeder): integrate ast transforms into add-recipe generator"
 ```
 
@@ -1232,7 +1232,7 @@ Expected: 0 TSC issues.
 - [ ] **Step 5: Verify snapshot files were generated**
 
 ```bash
-ls tests/unit/packages/spoonfeeder/utils/__snapshots__/
+ls tests/unit/utils/__snapshots__/
 ```
 
 Expected: `module-updater.spec.ts.snap` and `main-ts-updater.spec.ts.snap` both exist.

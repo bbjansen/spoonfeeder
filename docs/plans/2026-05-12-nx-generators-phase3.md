@@ -4,7 +4,7 @@
 
 **Goal:** Implement the remove-recipe generator that cleanly removes a recipe from a project — deleting recipe files, removing imports from app.module.ts, removing main.ts blocks, cleaning up env vars and AI context, and updating the manifest.
 
-**Architecture:** The `remove-recipe` generator lives at `packages/spoonfeeder/src/generators/remove-recipe/` and performs the inverse of `add-recipe`. It reads the `.spoonfeeder.json` manifest to discover exactly what the recipe installed (files, module imports, main.ts blocks, env sections, AI context sections), then removes each artifact using the shared utilities from Phases 1-2. A dependency checker prevents removing a recipe that other installed recipes depend on (unless `--force` is used).
+**Architecture:** The `remove-recipe` generator lives at `src/generators/remove-recipe/` and performs the inverse of `add-recipe`. It reads the `.spoonfeeder.json` manifest to discover exactly what the recipe installed (files, module imports, main.ts blocks, env sections, AI context sections), then removes each artifact using the shared utilities from Phases 1-2. A dependency checker prevents removing a recipe that other installed recipes depend on (unless `--force` is used).
 
 **Tech Stack:** @nx/devkit, ts-morph (reusing Phase 2 utilities)
 
@@ -31,12 +31,12 @@ This is **Phase 3 of 4**:
 
 | File                                                                         | Responsibility                                 |
 | ---------------------------------------------------------------------------- | ---------------------------------------------- |
-| `packages/spoonfeeder/src/generators/remove-recipe/schema.json`              | Nx schema definition                           |
-| `packages/spoonfeeder/src/generators/remove-recipe/schema.d.ts`              | TypeScript types for schema                    |
-| `packages/spoonfeeder/src/generators/remove-recipe/generator.ts`             | Remove-recipe generator logic                  |
-| `packages/spoonfeeder/src/utils/dependency-checker.ts`                       | Check if other recipes depend on a recipe      |
-| `tests/unit/packages/spoonfeeder/utils/dependency-checker.spec.ts`           | Dependency checker unit tests                  |
-| `tests/unit/packages/spoonfeeder/generators/remove-recipe/generator.spec.ts` | Remove-recipe generator unit tests             |
+| `src/generators/remove-recipe/schema.json`              | Nx schema definition                           |
+| `src/generators/remove-recipe/schema.d.ts`              | TypeScript types for schema                    |
+| `src/generators/remove-recipe/generator.ts`             | Remove-recipe generator logic                  |
+| `src/utils/dependency-checker.ts`                       | Check if other recipes depend on a recipe      |
+| `tests/unit/utils/dependency-checker.spec.ts`           | Dependency checker unit tests                  |
+| `tests/unit/generators/remove-recipe/generator.spec.ts` | Remove-recipe generator unit tests             |
 | `tests/integration/spoonfeeder/remove-recipe.integration.spec.ts`            | Add-then-remove round-trip integration test    |
 | `tests/e2e/spoonfeeder/remove-recipe.e2e.spec.ts`                            | E2E: add swagger, build, remove swagger, build |
 
@@ -44,8 +44,8 @@ This is **Phase 3 of 4**:
 
 | File                                                | Change                                                                              |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `packages/spoonfeeder/generators.json`              | Register the `remove` generator                                                     |
-| `packages/spoonfeeder/src/utils/recipe-manifest.ts` | Add `removeRecipeFromManifest` if not already exported (verify Phase 1 included it) |
+| `generators.json`              | Register the `remove` generator                                                     |
+| `src/utils/recipe-manifest.ts` | Add `removeRecipeFromManifest` if not already exported (verify Phase 1 included it) |
 
 ---
 
@@ -53,12 +53,12 @@ This is **Phase 3 of 4**:
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/remove-recipe/schema.json`
-- Create: `packages/spoonfeeder/src/generators/remove-recipe/schema.d.ts`
+- Create: `src/generators/remove-recipe/schema.json`
+- Create: `src/generators/remove-recipe/schema.d.ts`
 
 - [ ] **Step 1: Create schema.json**
 
-Create `packages/spoonfeeder/src/generators/remove-recipe/schema.json`:
+Create `src/generators/remove-recipe/schema.json`:
 
 ```json
 {
@@ -95,7 +95,7 @@ Create `packages/spoonfeeder/src/generators/remove-recipe/schema.json`:
 
 - [ ] **Step 2: Create schema.d.ts**
 
-Create `packages/spoonfeeder/src/generators/remove-recipe/schema.d.ts`:
+Create `src/generators/remove-recipe/schema.d.ts`:
 
 ```typescript
 export interface RemoveRecipeGeneratorSchema {
@@ -108,7 +108,7 @@ export interface RemoveRecipeGeneratorSchema {
 
 - [ ] **Step 3: Register in generators.json**
 
-Read `packages/spoonfeeder/generators.json` and add the `remove` entry to the `generators` object:
+Read `generators.json` and add the `remove` entry to the `generators` object:
 
 ```json
 {
@@ -135,7 +135,7 @@ Read `packages/spoonfeeder/generators.json` and add the `remove` entry to the `g
 - [ ] **Step 4: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/remove-recipe/schema.json packages/spoonfeeder/src/generators/remove-recipe/schema.d.ts packages/spoonfeeder/generators.json
+git add src/generators/remove-recipe/schema.json src/generators/remove-recipe/schema.d.ts generators.json
 git commit -m "feat(spoonfeeder): add remove-recipe generator schema and types"
 ```
 
@@ -145,14 +145,14 @@ git commit -m "feat(spoonfeeder): add remove-recipe generator schema and types"
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/utils/dependency-checker.ts`
-- Create: `tests/unit/packages/spoonfeeder/utils/dependency-checker.spec.ts`
+- Create: `src/utils/dependency-checker.ts`
+- Create: `tests/unit/utils/dependency-checker.spec.ts`
 
 The dependency checker prevents removing a recipe that other installed recipes depend on via their `requires` field. It scans all installed recipes and returns a list of dependents.
 
 - [ ] **Step 1: Write the failing test**
 
-Create `tests/unit/packages/spoonfeeder/utils/dependency-checker.spec.ts`:
+Create `tests/unit/utils/dependency-checker.spec.ts`:
 
 ```typescript
 import { findDependents } from '@spoonfeeder/utils/dependency-checker';
@@ -238,7 +238,7 @@ Expected: FAIL (module not found).
 
 - [ ] **Step 3: Implement dependency-checker.ts**
 
-Create `packages/spoonfeeder/src/utils/dependency-checker.ts`:
+Create `src/utils/dependency-checker.ts`:
 
 ```typescript
 import type { RecipeDefinition, RecipeId } from '../types.js';
@@ -293,7 +293,7 @@ Expected: 5 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/utils/dependency-checker.ts tests/unit/packages/spoonfeeder/utils/dependency-checker.spec.ts
+git add src/utils/dependency-checker.ts tests/unit/utils/dependency-checker.spec.ts
 git commit -m "feat(spoonfeeder): add dependency checker for recipe removal safety"
 ```
 
@@ -303,26 +303,26 @@ git commit -m "feat(spoonfeeder): add dependency checker for recipe removal safe
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/remove-recipe/generator.ts`
+- Create: `src/generators/remove-recipe/generator.ts`
 
 This generator performs the inverse of `add-recipe`. It reads the manifest to discover what was installed and removes each artifact using the shared Phase 1-2 utilities.
 
 **Dependencies on Phase 2 utilities:**
 
-- `removeModuleImport(tree, filePath, moduleName, importPath)` from `packages/spoonfeeder/src/utils/module-updater.ts`
-- `removeMainTsBlock(tree, filePath, blockId)` from `packages/spoonfeeder/src/utils/main-ts-updater.ts`
+- `removeModuleImport(tree, filePath, moduleName, importPath)` from `src/utils/module-updater.ts`
+- `removeMainTsBlock(tree, filePath, blockId)` from `src/utils/main-ts-updater.ts`
 
 **Dependencies on Phase 1 utilities:**
 
-- `removeEnvSection(tree, sectionName)` from `packages/spoonfeeder/src/utils/env-updater.ts`
-- `removeClaudeMdSection(tree, recipeId)`, `removeCursorRules(tree, recipeId)`, `removeCopilotInstructions(tree, recipeId)` from `packages/spoonfeeder/src/utils/ai-context-updater.ts`
-- `readManifest(tree)`, `removeRecipeFromManifest(tree, recipeId)` from `packages/spoonfeeder/src/utils/recipe-manifest.ts`
+- `removeEnvSection(tree, sectionName)` from `src/utils/env-updater.ts`
+- `removeClaudeMdSection(tree, recipeId)`, `removeCursorRules(tree, recipeId)`, `removeCopilotInstructions(tree, recipeId)` from `src/utils/ai-context-updater.ts`
+- `readManifest(tree)`, `removeRecipeFromManifest(tree, recipeId)` from `src/utils/recipe-manifest.ts`
 
 > **Note:** The Phase 1 utilities operate on the filesystem directly. In Phase 2, these should have been adapted to work with the Nx `Tree` virtual filesystem for dry-run support. If that adaptation hasn't happened, this task must create Tree-compatible wrappers. The implementation below assumes Tree-compatible versions exist. If they do not, create thin wrappers that read/write via `tree.read()` / `tree.write()` instead of `fs.readFileSync()` / `fs.writeFileSync()`.
 
 - [ ] **Step 1: Implement the generator**
 
-Create `packages/spoonfeeder/src/generators/remove-recipe/generator.ts`:
+Create `src/generators/remove-recipe/generator.ts`:
 
 ```typescript
 import { Tree, updateJson, logger } from '@nx/devkit';
@@ -590,7 +590,7 @@ Expected: compiles with no errors.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/remove-recipe/generator.ts
+git add src/generators/remove-recipe/generator.ts
 git commit -m "feat(spoonfeeder): implement remove-recipe generator"
 ```
 
@@ -600,13 +600,13 @@ git commit -m "feat(spoonfeeder): implement remove-recipe generator"
 
 **Files:**
 
-- Create: `tests/unit/packages/spoonfeeder/generators/remove-recipe/generator.spec.ts`
+- Create: `tests/unit/generators/remove-recipe/generator.spec.ts`
 
 These tests use a mock `Tree` from `@nx/devkit/testing` to exercise the generator in isolation.
 
 - [ ] **Step 1: Write the unit test file**
 
-Create `tests/unit/packages/spoonfeeder/generators/remove-recipe/generator.spec.ts`:
+Create `tests/unit/generators/remove-recipe/generator.spec.ts`:
 
 ```typescript
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
@@ -950,7 +950,7 @@ Expected: 12 tests pass.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add tests/unit/packages/spoonfeeder/generators/remove-recipe/generator.spec.ts
+git add tests/unit/generators/remove-recipe/generator.spec.ts
 git commit -m "test(spoonfeeder): add remove-recipe generator unit tests"
 ```
 
@@ -1240,7 +1240,7 @@ describe('remove-recipe E2E', () => {
   it(
     'should add swagger, build, remove swagger, build — both succeed',
     () => {
-      const spoonfeederBin = path.resolve(__dirname, '../../../packages/spoonfeeder/dist/index.js');
+      const spoonfeederBin = path.resolve(__dirname, '../../../dist/index.js');
 
       // Step 1: Generate a base project using spoonfeeder
       run(
@@ -1386,7 +1386,7 @@ Expected: 0 TSC issues.
 - [ ] **Step 5: Verify generators.json lists all three generators**
 
 ```bash
-node -e "const g = require('./packages/spoonfeeder/generators.json'); console.log(Object.keys(g.generators).sort().join(', '))"
+node -e "const g = require('./generators.json'); console.log(Object.keys(g.generators).sort().join(', '))"
 ```
 
 Expected output: `add, list, remove`

@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, BadRequestException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
+import { timingSafeEqual } from 'node:crypto';
 import { FastifyRequest } from 'fastify';
 
 @Injectable()
@@ -17,7 +18,10 @@ export class ContentDigestGuard implements CanActivate {
     const body = JSON.stringify(request.body);
     const actualHash = createHash('sha-256').update(body).digest('base64');
 
-    if (expectedHash !== actualHash) {
+    const expectedBuffer = Buffer.from(expectedHash, 'base64');
+    const actualBuffer = Buffer.from(actualHash, 'base64');
+
+    if (expectedBuffer.length !== actualBuffer.length || !timingSafeEqual(expectedBuffer, actualBuffer)) {
       throw new BadRequestException('Content-Digest mismatch — payload integrity check failed');
     }
 

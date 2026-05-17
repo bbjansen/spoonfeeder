@@ -1,7 +1,8 @@
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import CircuitBreaker from 'opossum';
 
-interface CircuitBreakerOptions {
+export interface CircuitBreakerOptions {
   /** Time in ms before a request is considered timed out */
   timeout?: number;
   /** Percentage of failures before opening the circuit */
@@ -14,13 +15,37 @@ interface CircuitBreakerOptions {
   rollingCountTimeout?: number;
 }
 
-const DEFAULT_OPTIONS: CircuitBreakerOptions = {
+const HARDCODED_DEFAULTS: CircuitBreakerOptions = {
   timeout: 3000,
   errorThresholdPercentage: 50,
   resetTimeout: 30_000,
   rollingCountBuckets: 10,
   rollingCountTimeout: 10_000,
 };
+
+/**
+ * Build default options by reading CIRCUIT_BREAKER_* env vars via ConfigService.
+ * Falls back to hardcoded defaults when the env vars are not set or no ConfigService is provided.
+ */
+function buildDefaults(configService?: ConfigService): CircuitBreakerOptions {
+  if (!configService) {
+    return { ...HARDCODED_DEFAULTS };
+  }
+
+  return {
+    timeout: configService.get<number>('CIRCUIT_BREAKER_TIMEOUT', HARDCODED_DEFAULTS.timeout!),
+    errorThresholdPercentage: configService.get<number>(
+      'CIRCUIT_BREAKER_THRESHOLD',
+      HARDCODED_DEFAULTS.errorThresholdPercentage!,
+    ),
+    resetTimeout: configService.get<number>(
+      'CIRCUIT_BREAKER_RESET_TIMEOUT',
+      HARDCODED_DEFAULTS.resetTimeout!,
+    ),
+    rollingCountBuckets: HARDCODED_DEFAULTS.rollingCountBuckets,
+    rollingCountTimeout: HARDCODED_DEFAULTS.rollingCountTimeout,
+  };
+}
 
 export class CircuitBreakerWrapper<TResult = unknown> {
   private readonly logger = new Logger(CircuitBreakerWrapper.name);
@@ -29,8 +54,9 @@ export class CircuitBreakerWrapper<TResult = unknown> {
   constructor(
     action: (...args: unknown[]) => Promise<TResult>,
     options: CircuitBreakerOptions = {},
+    configService?: ConfigService,
   ) {
-    const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
+    const mergedOptions = { ...buildDefaults(configService), ...options };
 
     this.breaker = new CircuitBreaker(action, mergedOptions);
 

@@ -10,22 +10,24 @@ An out-of-the-box admin panel powered by [AdminJS](https://adminjs.co/) that pro
 
 ## Dependencies
 
-| Package                  | Version |
-| ------------------------ | ------- |
-| `adminjs`                | 7.8.13  |
-| `@adminjs/nestjs`        | 6.1.0   |
-| `@adminjs/express`       | 6.1.0   |
-| `express`                | 5.1.0   |
-| `express-session`        | 1.18.1  |
-| `express-formidable`     | 1.2.0   |
-| `@types/express-session` | 1.18.1  |
+| Package                    | Version  |
+| -------------------------- | -------- |
+| `adminjs`                  | 7.8.13   |
+| `@adminjs/nestjs`          | 6.1.0    |
+| `@adminjs/express`         | 6.1.0    |
+| `@nestjs/platform-express` | 11.1.19  |
+| `express-session`          | 1.18.1   |
+| `express-formidable`       | 1.2.0    |
+| `@types/express-session`   | 1.18.1   |
+
+> **Note:** AdminJS requires the Express HTTP adapter (`@nestjs/platform-express`). The `@adminjs/nestjs` module uses `@adminjs/express` internally, which is incompatible with Fastify. The Express platform package is included automatically by this recipe.
 
 ## Environment Variables
 
-| Variable         | Default             | Description            |
-| ---------------- | ------------------- | ---------------------- |
-| `ADMIN_EMAIL`    | `admin@example.com` | AdminJS login email    |
-| `ADMIN_PASSWORD` | `changeme`          | AdminJS login password |
+| Variable         | Default             | Description                      |
+| ---------------- | ------------------- | -------------------------------- |
+| `ADMIN_EMAIL`    | `admin@example.com` | AdminJS login email              |
+| `ADMIN_PASSWORD` | _(empty)_           | AdminJS login password (required)|
 
 ## Usage
 

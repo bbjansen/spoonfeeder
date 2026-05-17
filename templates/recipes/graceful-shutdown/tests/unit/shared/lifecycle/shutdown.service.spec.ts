@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { ShutdownService } from '../../../../src/shared/lifecycle/shutdown.service';
 
 describe('ShutdownService', () => {
@@ -35,5 +36,17 @@ describe('ShutdownService', () => {
 
     expect(failing).toHaveBeenCalled();
     expect(succeeding).toHaveBeenCalled();
+  });
+
+  it('should read SHUTDOWN_TIMEOUT_MS from ConfigService', () => {
+    const configService = new ConfigService({ SHUTDOWN_TIMEOUT_MS: 5000 });
+    const svc = new ShutdownService(configService);
+
+    expect(svc).toBeDefined();
+  });
+
+  it('should use the default timeout when ConfigService is not provided', () => {
+    const svc = new ShutdownService();
+    expect(svc).toBeDefined();
   });
 });

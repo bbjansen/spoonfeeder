@@ -6,10 +6,10 @@ Common REST API patterns for NestJS. Pagination, filtering, versioning, and requ
 
 | Recipe         | Purpose                               | Recipe README                                                               |
 | -------------- | ------------------------------------- | --------------------------------------------------------------------------- |
-| Pagination     | Cursor and offset-based pagination    | [pagination](../../packages/templates/recipes/pagination/README.md)         |
-| Filtering      | Query parameter filtering and sorting | [filtering](../../packages/templates/recipes/filtering/README.md)           |
-| API Versioning | URI, header, or media-type versioning | [api-versioning](../../packages/templates/recipes/api-versioning/README.md) |
-| Correlation ID | Request tracing across services       | [correlation-id](../../packages/templates/recipes/correlation-id/README.md) |
+| Pagination     | Cursor and offset-based pagination    | [pagination](../../templates/recipes/pagination/README.md)         |
+| Filtering      | Query parameter filtering and sorting | [filtering](../../templates/recipes/filtering/README.md)           |
+| API Versioning | URI, header, or media-type versioning | [api-versioning](../../templates/recipes/api-versioning/README.md) |
+| Correlation ID | Request tracing across services       | [correlation-id](../../templates/recipes/correlation-id/README.md) |
 
 ## Pagination
 

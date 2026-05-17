@@ -6,7 +6,7 @@ Performance and load testing tools for validating NestJS applications under real
 
 | Recipe       | Tool                           | Best For                                            | Recipe README                                                           |
 | ------------ | ------------------------------ | --------------------------------------------------- | ----------------------------------------------------------------------- |
-| Load Testing | [k6](https://k6.io/) (Grafana) | HTTP load tests, stress tests, soak tests, CI gates | [load-testing](../../packages/templates/recipes/load-testing/README.md) |
+| Load Testing | [k6](https://k6.io/) (Grafana) | HTTP load tests, stress tests, soak tests, CI gates | [load-testing](../../templates/recipes/load-testing/README.md) |
 
 ## When to Use
 

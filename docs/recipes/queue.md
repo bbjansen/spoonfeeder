@@ -6,8 +6,8 @@ Message queue and job processing options for NestJS. Use queues for background j
 
 | Recipe   | Transport  | Best For                                       | Recipe README                                                   |
 | -------- | ---------- | ---------------------------------------------- | --------------------------------------------------------------- |
-| RabbitMQ | AMQP 0-9-1 | Service-to-service messaging, pub/sub, routing | [rabbitmq](../../packages/templates/recipes/rabbitmq/README.md) |
-| BullMQ   | Redis      | Background jobs, delayed tasks, rate limiting  | [bullmq](../../packages/templates/recipes/bullmq/README.md)     |
+| RabbitMQ | AMQP 0-9-1 | Service-to-service messaging, pub/sub, routing | [rabbitmq](../../templates/recipes/rabbitmq/README.md) |
+| BullMQ   | Redis      | Background jobs, delayed tasks, rate limiting  | [bullmq](../../templates/recipes/bullmq/README.md)     |
 
 ## Comparison
 

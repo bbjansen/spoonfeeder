@@ -6,8 +6,8 @@ AsyncLocalStorage-based request context propagation for NestJS, enabling access 
 
 | Recipe          | Library / Approach                     | Best For                               | Recipe README                                                                 |
 | --------------- | -------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------------- |
-| Request Context | nestjs-cls (AsyncLocalStorage)         | User context, tenant ID, feature flags | [request-context](../../packages/templates/recipes/request-context/README.md) |
-| Correlation ID  | AsyncLocalStorage + header propagation | Distributed tracing, log correlation   | [correlation-id](../../packages/templates/recipes/correlation-id/README.md)   |
+| Request Context | nestjs-cls (AsyncLocalStorage)         | User context, tenant ID, feature flags | [request-context](../../templates/recipes/request-context/README.md) |
+| Correlation ID  | AsyncLocalStorage + header propagation | Distributed tracing, log correlation   | [correlation-id](../../templates/recipes/correlation-id/README.md)   |
 
 ## When to Use Each
 

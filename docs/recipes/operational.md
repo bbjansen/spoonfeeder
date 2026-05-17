@@ -6,10 +6,10 @@ Production-readiness patterns for NestJS: graceful shutdown, resilience, feature
 
 | Recipe            | Purpose                                                             | Recipe README                                                                     |
 | ----------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Graceful Shutdown | Drain connections and finish in-flight requests before exit         | [graceful-shutdown](../../packages/templates/recipes/graceful-shutdown/README.md) |
-| Circuit Breaker   | Prevent cascading failures when downstream services are unavailable | [circuit-breaker](../../packages/templates/recipes/circuit-breaker/README.md)     |
-| Feature Flags     | Toggle features at runtime without redeployment                     | [feature-flags](../../packages/templates/recipes/feature-flags/README.md)         |
-| Multi-Tenancy     | Isolate data and configuration per tenant                           | [multi-tenancy](../../packages/templates/recipes/multi-tenancy/README.md)         |
+| Graceful Shutdown | Drain connections and finish in-flight requests before exit         | [graceful-shutdown](../../templates/recipes/graceful-shutdown/README.md) |
+| Circuit Breaker   | Prevent cascading failures when downstream services are unavailable | [circuit-breaker](../../templates/recipes/circuit-breaker/README.md)     |
+| Feature Flags     | Toggle features at runtime without redeployment                     | [feature-flags](../../templates/recipes/feature-flags/README.md)         |
+| Multi-Tenancy     | Isolate data and configuration per tenant                           | [multi-tenancy](../../templates/recipes/multi-tenancy/README.md)         |
 
 ## Graceful Shutdown
 

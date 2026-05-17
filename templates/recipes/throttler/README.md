@@ -17,10 +17,18 @@ Rate limiting for NestJS using the official throttler module.
 ## Usage
 
 ```typescript
-import { throttlerConfig } from '@/shared/guards/throttle.config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { throttlerConfigFactory } from '@/shared/guards/throttle.config';
 
 @Module({
-  imports: [ThrottlerModule.forRoot(throttlerConfig)],
+  imports: [
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: throttlerConfigFactory,
+    }),
+  ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

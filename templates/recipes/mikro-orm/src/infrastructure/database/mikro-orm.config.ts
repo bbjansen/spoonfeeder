@@ -8,7 +8,7 @@ const config: Options<PostgreSqlDriver> = {
   port: Number(process.env.DB_PORT ?? 5432),
   dbName: process.env.DB_NAME ?? 'app',
   user: process.env.DB_USERNAME ?? 'postgres',
-  password: process.env.DB_PASSWORD ?? 'postgres',
+  password: process.env.DB_PASSWORD ?? (() => { throw new Error('DB_PASSWORD environment variable is required'); })(),
   entities: ['./dist/infrastructure/database/entities/*.js'],
   entitiesTs: ['./src/infrastructure/database/entities/*.ts'],
   extensions: [Migrator],

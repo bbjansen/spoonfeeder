@@ -4,7 +4,7 @@
 
 **Goal:** Implement `add-recipe` and `list-recipes` Nx generators with file copying, package.json merging, env var appending, AI context updates, and manifest tracking — without AST transforms (no app.module.ts modification yet).
 
-**Architecture:** The generators live inside `packages/spoonfeeder/` alongside the existing CLI scaffolder. They reuse the existing `RecipeRegistry`, `RecipeDefinition`, and `detectConflicts` infrastructure. A `.spoonfeeder.json` manifest file in each generated project tracks which recipes are installed. Phase 1 handles recipes that only add files (devcontainer, changelog, license, docker-compose-dev, load-testing, etc.) — AST-modifying recipes come in Phase 2.
+**Architecture:** The generators live inside `` alongside the existing CLI scaffolder. They reuse the existing `RecipeRegistry`, `RecipeDefinition`, and `detectConflicts` infrastructure. A `.spoonfeeder.json` manifest file in each generated project tracks which recipes are installed. Phase 1 handles recipes that only add files (devcontainer, changelog, license, docker-compose-dev, load-testing, etc.) — AST-modifying recipes come in Phase 2.
 
 **Tech Stack:** `@nx/devkit` (generator API, Tree virtual filesystem), `ts-morph` (installed but used in Phase 2), existing `RecipeDefinition` types, `fs-extra`, `ejs`
 
@@ -29,25 +29,25 @@ This is **Phase 1 of 4**:
 
 | File                                                               | Responsibility                                                       |
 | ------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| `packages/spoonfeeder/generators.json`                             | Nx generators entry point                                            |
-| `packages/spoonfeeder/src/generators/add-recipe/generator.ts`      | Add-recipe generator logic                                           |
-| `packages/spoonfeeder/src/generators/add-recipe/schema.json`       | Nx schema definition                                                 |
-| `packages/spoonfeeder/src/generators/add-recipe/schema.d.ts`       | TypeScript types for schema                                          |
-| `packages/spoonfeeder/src/generators/list-recipes/generator.ts`    | List-recipes generator logic                                         |
-| `packages/spoonfeeder/src/generators/list-recipes/schema.json`     | Nx schema definition                                                 |
-| `packages/spoonfeeder/src/utils/recipe-manifest.ts`                | Read/write .spoonfeeder.json                                         |
-| `packages/spoonfeeder/src/utils/env-updater.ts`                    | Add/remove sections in .env.example                                  |
-| `packages/spoonfeeder/src/utils/ai-context-updater.ts`             | Add/remove sections in CLAUDE.md, .cursorrules, copilot-instructions |
-| `tests/unit/packages/spoonfeeder/utils/recipe-manifest.spec.ts`    | Manifest unit tests                                                  |
-| `tests/unit/packages/spoonfeeder/utils/env-updater.spec.ts`        | Env updater unit tests                                               |
-| `tests/unit/packages/spoonfeeder/utils/ai-context-updater.spec.ts` | AI context updater unit tests                                        |
+| `generators.json`                             | Nx generators entry point                                            |
+| `src/generators/add-recipe/generator.ts`      | Add-recipe generator logic                                           |
+| `src/generators/add-recipe/schema.json`       | Nx schema definition                                                 |
+| `src/generators/add-recipe/schema.d.ts`       | TypeScript types for schema                                          |
+| `src/generators/list-recipes/generator.ts`    | List-recipes generator logic                                         |
+| `src/generators/list-recipes/schema.json`     | Nx schema definition                                                 |
+| `src/utils/recipe-manifest.ts`                | Read/write .spoonfeeder.json                                         |
+| `src/utils/env-updater.ts`                    | Add/remove sections in .env.example                                  |
+| `src/utils/ai-context-updater.ts`             | Add/remove sections in CLAUDE.md, .cursorrules, copilot-instructions |
+| `tests/unit/utils/recipe-manifest.spec.ts`    | Manifest unit tests                                                  |
+| `tests/unit/utils/env-updater.spec.ts`        | Env updater unit tests                                               |
+| `tests/unit/utils/ai-context-updater.spec.ts` | AI context updater unit tests                                        |
 
 ### Files to Modify
 
 | File                                 | Change                                                      |
 | ------------------------------------ | ----------------------------------------------------------- |
-| `packages/spoonfeeder/package.json`  | Add `@nx/devkit`, `ts-morph` deps, add `"generators"` field |
-| `packages/spoonfeeder/tsconfig.json` | Ensure generators are compiled                              |
+| `package.json`  | Add `@nx/devkit`, `ts-morph` deps, add `"generators"` field |
+| `tsconfig.json` | Ensure generators are compiled                              |
 
 ---
 
@@ -55,8 +55,8 @@ This is **Phase 1 of 4**:
 
 **Files:**
 
-- Modify: `packages/spoonfeeder/package.json`
-- Create: `packages/spoonfeeder/generators.json`
+- Modify: `package.json`
+- Create: `generators.json`
 
 - [ ] **Step 1: Install @nx/devkit and ts-morph**
 
@@ -66,7 +66,7 @@ pnpm --filter spoonfeeder add -E @nx/devkit ts-morph
 
 - [ ] **Step 2: Add generators field to package.json**
 
-Read `packages/spoonfeeder/package.json` and add after the `"bin"` field:
+Read `package.json` and add after the `"bin"` field:
 
 ```json
 "generators": "./generators.json",
@@ -74,7 +74,7 @@ Read `packages/spoonfeeder/package.json` and add after the `"bin"` field:
 
 - [ ] **Step 3: Create generators.json**
 
-Create `packages/spoonfeeder/generators.json`:
+Create `generators.json`:
 
 ```json
 {
@@ -104,7 +104,7 @@ Expected: compiles with no errors.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add packages/spoonfeeder/package.json packages/spoonfeeder/generators.json pnpm-lock.yaml
+git add package.json generators.json pnpm-lock.yaml
 git commit -m "chore(spoonfeeder): add nx devkit and generators entry point"
 ```
 
@@ -114,12 +114,12 @@ git commit -m "chore(spoonfeeder): add nx devkit and generators entry point"
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/utils/recipe-manifest.ts`
-- Create: `tests/unit/packages/spoonfeeder/utils/recipe-manifest.spec.ts`
+- Create: `src/utils/recipe-manifest.ts`
+- Create: `tests/unit/utils/recipe-manifest.spec.ts`
 
 - [ ] **Step 1: Write the failing test**
 
-Create `tests/unit/packages/spoonfeeder/utils/recipe-manifest.spec.ts`:
+Create `tests/unit/utils/recipe-manifest.spec.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -217,7 +217,7 @@ Expected: FAIL (module not found).
 
 - [ ] **Step 3: Implement recipe-manifest.ts**
 
-Create `packages/spoonfeeder/src/utils/recipe-manifest.ts`:
+Create `src/utils/recipe-manifest.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -303,7 +303,7 @@ Expected: 4 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/utils/recipe-manifest.ts tests/unit/packages/spoonfeeder/utils/recipe-manifest.spec.ts
+git add src/utils/recipe-manifest.ts tests/unit/utils/recipe-manifest.spec.ts
 git commit -m "feat(spoonfeeder): add recipe manifest read/write utilities"
 ```
 
@@ -313,12 +313,12 @@ git commit -m "feat(spoonfeeder): add recipe manifest read/write utilities"
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/utils/env-updater.ts`
-- Create: `tests/unit/packages/spoonfeeder/utils/env-updater.spec.ts`
+- Create: `src/utils/env-updater.ts`
+- Create: `tests/unit/utils/env-updater.spec.ts`
 
 - [ ] **Step 1: Write the failing test**
 
-Create `tests/unit/packages/spoonfeeder/utils/env-updater.spec.ts`:
+Create `tests/unit/utils/env-updater.spec.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -381,7 +381,7 @@ describe('env-updater', () => {
 
 - [ ] **Step 2: Implement env-updater.ts**
 
-Create `packages/spoonfeeder/src/utils/env-updater.ts`:
+Create `src/utils/env-updater.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -443,7 +443,7 @@ Expected: 3 tests pass.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/utils/env-updater.ts tests/unit/packages/spoonfeeder/utils/env-updater.spec.ts
+git add src/utils/env-updater.ts tests/unit/utils/env-updater.spec.ts
 git commit -m "feat(spoonfeeder): add env section updater for generators"
 ```
 
@@ -453,12 +453,12 @@ git commit -m "feat(spoonfeeder): add env section updater for generators"
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/utils/ai-context-updater.ts`
-- Create: `tests/unit/packages/spoonfeeder/utils/ai-context-updater.spec.ts`
+- Create: `src/utils/ai-context-updater.ts`
+- Create: `tests/unit/utils/ai-context-updater.spec.ts`
 
 - [ ] **Step 1: Write the failing test**
 
-Create `tests/unit/packages/spoonfeeder/utils/ai-context-updater.spec.ts`:
+Create `tests/unit/utils/ai-context-updater.spec.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -511,7 +511,7 @@ describe('ai-context-updater', () => {
 
 - [ ] **Step 2: Implement ai-context-updater.ts**
 
-Create `packages/spoonfeeder/src/utils/ai-context-updater.ts`:
+Create `src/utils/ai-context-updater.ts`:
 
 ```typescript
 import * as fs from 'node:fs';
@@ -588,7 +588,7 @@ Expected: 3 tests pass.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/utils/ai-context-updater.ts tests/unit/packages/spoonfeeder/utils/ai-context-updater.spec.ts
+git add src/utils/ai-context-updater.ts tests/unit/utils/ai-context-updater.spec.ts
 git commit -m "feat(spoonfeeder): add ai context updater for generators"
 ```
 
@@ -598,12 +598,12 @@ git commit -m "feat(spoonfeeder): add ai context updater for generators"
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/add-recipe/schema.json`
-- Create: `packages/spoonfeeder/src/generators/add-recipe/schema.d.ts`
+- Create: `src/generators/add-recipe/schema.json`
+- Create: `src/generators/add-recipe/schema.d.ts`
 
 - [ ] **Step 1: Create schema.json**
 
-Create `packages/spoonfeeder/src/generators/add-recipe/schema.json`:
+Create `src/generators/add-recipe/schema.json`:
 
 ```json
 {
@@ -640,7 +640,7 @@ Create `packages/spoonfeeder/src/generators/add-recipe/schema.json`:
 
 - [ ] **Step 2: Create schema.d.ts**
 
-Create `packages/spoonfeeder/src/generators/add-recipe/schema.d.ts`:
+Create `src/generators/add-recipe/schema.d.ts`:
 
 ```typescript
 export interface AddRecipeGeneratorSchema {
@@ -654,7 +654,7 @@ export interface AddRecipeGeneratorSchema {
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/add-recipe/
+git add src/generators/add-recipe/
 git commit -m "feat(spoonfeeder): add add-recipe generator schema"
 ```
 
@@ -664,11 +664,11 @@ git commit -m "feat(spoonfeeder): add add-recipe generator schema"
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/add-recipe/generator.ts`
+- Create: `src/generators/add-recipe/generator.ts`
 
 - [ ] **Step 1: Implement the generator**
 
-Create `packages/spoonfeeder/src/generators/add-recipe/generator.ts`:
+Create `src/generators/add-recipe/generator.ts`:
 
 ```typescript
 import { Tree, formatFiles, generateFiles, updateJson, logger } from '@nx/devkit';
@@ -834,7 +834,7 @@ Expected: compiles with no errors.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/add-recipe/generator.ts
+git add src/generators/add-recipe/generator.ts
 git commit -m "feat(spoonfeeder): implement add-recipe generator (phase 1, no ast)"
 ```
 
@@ -844,12 +844,12 @@ git commit -m "feat(spoonfeeder): implement add-recipe generator (phase 1, no as
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/list-recipes/generator.ts`
-- Create: `packages/spoonfeeder/src/generators/list-recipes/schema.json`
+- Create: `src/generators/list-recipes/generator.ts`
+- Create: `src/generators/list-recipes/schema.json`
 
 - [ ] **Step 1: Create schema.json**
 
-Create `packages/spoonfeeder/src/generators/list-recipes/schema.json`:
+Create `src/generators/list-recipes/schema.json`:
 
 ```json
 {
@@ -878,7 +878,7 @@ Create `packages/spoonfeeder/src/generators/list-recipes/schema.json`:
 
 - [ ] **Step 2: Implement the generator**
 
-Create `packages/spoonfeeder/src/generators/list-recipes/generator.ts`:
+Create `src/generators/list-recipes/generator.ts`:
 
 ```typescript
 import { Tree, logger } from '@nx/devkit';
@@ -968,7 +968,7 @@ pnpm --filter spoonfeeder build
 - [ ] **Step 4: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/list-recipes/
+git add src/generators/list-recipes/
 git commit -m "feat(spoonfeeder): implement list-recipes generator"
 ```
 
@@ -976,11 +976,11 @@ git commit -m "feat(spoonfeeder): implement list-recipes generator"
 
 ## Task 8: Update initial project generation to create .spoonfeeder.json
 
-The existing generator in `packages/spoonfeeder/src/generator/generator.ts` needs to create a `.spoonfeeder.json` manifest in every generated project so the Nx generators can work.
+The existing generator in `src/generator/generator.ts` needs to create a `.spoonfeeder.json` manifest in every generated project so the Nx generators can work.
 
 **Files:**
 
-- Modify: `packages/spoonfeeder/src/generator/generator.ts`
+- Modify: `src/generator/generator.ts`
 
 - [ ] **Step 1: Add manifest creation after AI context assembly**
 
@@ -1016,7 +1016,7 @@ pnpm --filter spoonfeeder build && pnpm test:unit --passWithNoTests
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generator/generator.ts
+git add src/generator/generator.ts
 git commit -m "feat(spoonfeeder): generate .spoonfeeder.json manifest in new projects"
 ```
 
@@ -1051,7 +1051,7 @@ Expected: 0 TSC issues.
 - [ ] **Step 4: Verify generators.json is valid**
 
 ```bash
-cat packages/spoonfeeder/generators.json | node -e "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')); process.stdout.write('Valid JSON\n')"
+cat generators.json | node -e "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')); process.stdout.write('Valid JSON\n')"
 ```
 
 Expected: "Valid JSON"

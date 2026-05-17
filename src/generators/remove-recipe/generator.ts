@@ -6,6 +6,7 @@ import { findDependents } from '../../utils/dependency-checker.js';
 import type { RecipeId, RecipeDefinition } from '../../types.js';
 import type { SpoonfeederManifest } from '../../utils/recipe-manifest.js';
 import { removeModuleImportFromString } from '../../utils/module-updater.js';
+import { removeBlockFromString } from '../../utils/main-ts-updater.js';
 
 interface PackageJson {
   dependencies: Record<string, string>;
@@ -114,37 +115,24 @@ export default async function removeRecipeGenerator(
     }
   }
 
-  // 6. Remove main.ts blocks
+  // 6. Remove main.ts blocks and their imports
   if (recipeEntry.mainTsBlocks && recipeEntry.mainTsBlocks.length > 0) {
     const mainTsPath = 'src/main.ts';
     if (tree.exists(mainTsPath)) {
+      let mainContent = tree.read(mainTsPath, 'utf-8')!;
+
+      // Collect import module specifiers from the recipe definition
+      const importSpecifiers =
+        recipeDef?.mainTsSetup?.block?.imports?.map(
+          (imp: { moduleSpecifier: string }) => imp.moduleSpecifier,
+        ) ?? [];
+
       for (const blockId of recipeEntry.mainTsBlocks) {
-        removeMainTsBlockFromTree(tree, mainTsPath, blockId);
+        mainContent = removeBlockFromString(mainContent, blockId, importSpecifiers);
         logger.info(`  Removed main.ts block: ${blockId}`);
       }
 
-      // Remove any imports that were added for the main.ts blocks.
-      // These are tracked via comment markers: // @spoonfeeder-import:<recipe-id>
-      const mainContent = tree.read(mainTsPath, 'utf-8')!;
-      const importMarker = `// @spoonfeeder-import:${recipeId}`;
-      if (mainContent.includes(importMarker)) {
-        const lines = mainContent.split('\n');
-        const filtered: string[] = [];
-
-        for (let i = 0; i < lines.length; i++) {
-          // Check if the NEXT line is the marker — if so, skip the current line (the import)
-          if (i + 1 < lines.length && lines[i + 1].includes(importMarker)) {
-            continue;
-          }
-          // Skip the marker line itself
-          if (lines[i].includes(importMarker)) {
-            continue;
-          }
-          filtered.push(lines[i]);
-        }
-
-        tree.write(mainTsPath, filtered.join('\n'));
-      }
+      tree.write(mainTsPath, mainContent);
     }
   }
 
@@ -189,48 +177,6 @@ export default async function removeRecipeGenerator(
 
   logger.info(`\nRecipe '${recipeId}' removed successfully.`);
   logger.info('Run `pnpm install` to clean up the lockfile.');
-}
-
-/**
- * Removes a delimited code block from main.ts via Tree.
- * Looks for `// --- <blockId> start ---` through `// --- <blockId> end ---`.
- */
-function removeMainTsBlockFromTree(tree: Tree, filePath: string, blockId: string): void {
-  let content = tree.read(filePath, 'utf-8')!;
-  const startMarker = `// --- ${blockId} start ---`;
-  const endMarker = `// --- ${blockId} end ---`;
-
-  const startIdx = content.indexOf(startMarker);
-  const endIdx = content.indexOf(endMarker);
-  if (startIdx === -1 || endIdx === -1) return;
-
-  // Find the start of the line containing the start marker
-  let lineStart = startIdx;
-  while (lineStart > 0 && content[lineStart - 1] !== '\n') {
-    lineStart--;
-  }
-
-  // Find the end of the line containing the end marker
-  let lineEnd = endIdx + endMarker.length;
-  while (lineEnd < content.length && content[lineEnd] !== '\n') {
-    lineEnd++;
-  }
-  // Include the trailing newline
-  if (lineEnd < content.length && content[lineEnd] === '\n') {
-    lineEnd++;
-  }
-
-  // Also remove any leading blank line before the block
-  if (lineStart > 0 && content[lineStart - 1] === '\n') {
-    lineStart--;
-  }
-
-  content = content.slice(0, lineStart) + content.slice(lineEnd);
-
-  // Clean up multiple blank lines
-  content = content.replace(/\n{3,}/g, '\n\n');
-
-  tree.write(filePath, content);
 }
 
 /**

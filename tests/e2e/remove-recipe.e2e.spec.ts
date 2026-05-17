@@ -60,9 +60,14 @@ function run(command: string, args: string[], cwd: string): string {
 /**
  * Creates a Tree backed by a real filesystem directory by reading all files
  * into an in-memory Nx tree, running the generator, then flushing changes back.
+ *
+ * Returns the tree and the set of file paths that were read from disk,
+ * so flushTreeChanges can detect files that were deleted from the tree
+ * but still exist on disk (Nx virtual trees swallow CREATE→DELETE transitions).
  */
-function createTreeFromDirectory(dirPath: string): Tree {
+function createTreeFromDirectory(dirPath: string): { tree: Tree; diskFiles: Set<string> } {
   const tree = createTreeWithEmptyWorkspace();
+  const diskFiles = new Set<string>();
 
   function readDirRecursive(dir: string, prefix: string): void {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -76,18 +81,22 @@ function createTreeFromDirectory(dirPath: string): Tree {
         readDirRecursive(fullPath, relativePath);
       } else if (entry.isFile()) {
         tree.write(relativePath, fs.readFileSync(fullPath, 'utf-8'));
+        diskFiles.add(relativePath);
       }
     }
   }
 
   readDirRecursive(dirPath, '');
-  return tree;
+  return { tree, diskFiles };
 }
 
 /**
  * Flushes changes from an Nx Tree back to the real filesystem.
+ *
+ * Also handles files that existed on disk and were deleted from the tree —
+ * Nx virtual trees don't emit DELETE for files that were CREATE'd then DELETE'd.
  */
-function flushTreeChanges(tree: Tree, dirPath: string): void {
+function flushTreeChanges(tree: Tree, dirPath: string, diskFiles: Set<string>): void {
   const changes = tree.listChanges();
   for (const change of changes) {
     const fullPath = path.join(dirPath, change.path);
@@ -98,6 +107,16 @@ function flushTreeChanges(tree: Tree, dirPath: string): void {
         fs.writeFileSync(fullPath, change.content);
       }
     } else if (change.type === 'DELETE') {
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+      }
+    }
+  }
+
+  // Delete files that existed on disk but are no longer in the tree
+  for (const filePath of diskFiles) {
+    if (!tree.exists(filePath)) {
+      const fullPath = path.join(dirPath, filePath);
       if (fs.existsSync(fullPath)) {
         fs.unlinkSync(fullPath);
       }
@@ -152,9 +171,9 @@ describe('remove-recipe E2E', () => {
     expect(pkgAfterAdd.dependencies['@nestjs/swagger']).toBeDefined();
 
     // Step 4: Remove swagger recipe using the generator with a Tree backed by the filesystem
-    const tree = createTreeFromDirectory(outputDir);
+    const { tree, diskFiles } = createTreeFromDirectory(outputDir);
     await removeRecipeGenerator(tree, { recipe: 'swagger' });
-    flushTreeChanges(tree, outputDir);
+    flushTreeChanges(tree, outputDir, diskFiles);
 
     // Step 5: Reinstall to clean lockfile
     run('pnpm', ['install'], outputDir);

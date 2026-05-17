@@ -35,6 +35,8 @@ export class FileValidationPipe implements PipeTransform {
 
   transform(file: UploadedFile): UploadedFile {
     if (!file) throw new BadRequestException('No file uploaded');
+    // NOTE: mimetype comes from the client-supplied Content-Type header and can be spoofed.
+    // For production use, consider magic-byte validation (e.g. the 'file-type' npm package).
     if (!this.allowedTypes.has(file.mimetype)) {
       throw new BadRequestException(`File type ${file.mimetype} is not allowed`);
     }

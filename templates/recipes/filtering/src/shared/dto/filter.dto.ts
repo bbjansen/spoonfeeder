@@ -7,6 +7,7 @@ export enum SortOrder {
 }
 
 export class SortDto {
+  /** Consumers MUST validate sortBy against an allowlist of allowed column names before use in queries. */
   @ApiPropertyOptional({ description: 'Field to sort by' })
   @IsOptional()
   @IsString()

@@ -35,7 +35,7 @@ export function mergePackageJson(
   result.dependencies = sortKeys(deps);
   result.devDependencies = sortKeys(devDeps);
   if (Object.keys(scripts).length > 0) {
-    result.scripts = scripts;
+    result.scripts = sortKeys(scripts);
   }
 
   return result;

@@ -18,7 +18,7 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  app.enableCors({ origin: process.env.CORS_ORIGIN?.split(',') ?? false });
 
   app.enableShutdownHooks();
 

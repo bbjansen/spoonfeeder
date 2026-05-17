@@ -6,7 +6,7 @@ Auto-generate interactive API documentation with Swagger/OpenAPI for your NestJS
 
 | Recipe  | Description                             | Recipe README                                                 |
 | ------- | --------------------------------------- | ------------------------------------------------------------- |
-| Swagger | OpenAPI spec generation with Swagger UI | [swagger](../../packages/templates/recipes/swagger/README.md) |
+| Swagger | OpenAPI spec generation with Swagger UI | [swagger](../../templates/recipes/swagger/README.md) |
 
 ## Setup
 

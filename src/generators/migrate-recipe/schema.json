@@ -14,15 +14,6 @@
       "type": "string",
       "description": "Recipe ID to add (replacement)",
       "x-prompt": "Which recipe do you want to migrate TO?"
-    },
-    "project": {
-      "type": "string",
-      "description": "Target project (for monorepo)"
-    },
-    "dryRun": {
-      "type": "boolean",
-      "default": false,
-      "description": "Preview changes without applying"
     }
   },
   "required": ["from", "to"]

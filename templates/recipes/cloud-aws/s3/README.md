@@ -26,19 +26,19 @@ Amazon S3 object storage integration for file uploads and downloads in NestJS.
 ## Usage
 
 ```typescript
-import { S3StorageService } from '@/aws/s3-storage.service';
+import { S3Service } from '@/infrastructure/aws/s3.service';
 
 @Injectable()
 export class FileUploader {
-  constructor(private readonly storage: S3StorageService) {}
+  constructor(private readonly s3: S3Service) {}
 
-  async upload(key: string, body: Buffer, contentType: string): Promise<string> {
-    await this.storage.putObject({ key, body, contentType });
-    return this.storage.getSignedUrl(key, 3600);
+  async upload(bucket: string, key: string, body: Buffer): Promise<string> {
+    await this.s3.upload(bucket, key, body);
+    return this.s3.getPresignedUrl(bucket, key, 3600);
   }
 
-  async download(key: string): Promise<Buffer> {
-    return this.storage.getObject(key);
+  async download(bucket: string, key: string): Promise<Readable> {
+    return this.s3.download(bucket, key);
   }
 }
 ```

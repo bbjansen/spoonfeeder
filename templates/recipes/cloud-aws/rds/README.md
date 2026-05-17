@@ -4,7 +4,7 @@ AWS RDS managed database connection with IAM authentication support for NestJS.
 
 > **Note:** RDS does not require a dedicated service wrapper. Database access is handled through
 > TypeORM or Prisma, configured directly in a module. See the
-> [`typeorm-postgres`](../../database/typeorm-postgres/) recipe for a complete setup.
+> [`typeorm-postgres`](../../typeorm-postgres/) recipe for a complete setup.
 
 ## Documentation
 

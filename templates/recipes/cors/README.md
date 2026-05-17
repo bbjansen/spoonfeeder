@@ -19,7 +19,7 @@ No additional dependencies required. CORS support is built into NestJS and the F
 
 | Variable       | Description                     | Example                                             |
 | -------------- | ------------------------------- | --------------------------------------------------- |
-| `CORS_ORIGINS` | Comma-separated allowed origins | `https://app.example.com,https://admin.example.com` |
+| `CORS_ORIGIN` | Comma-separated allowed origins | `https://app.example.com,https://admin.example.com` |
 
 ## Usage
 
@@ -29,7 +29,7 @@ Configure in `main.ts`:
 const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
 app.enableCors({
-  origin: process.env.CORS_ORIGINS?.split(',') ?? false,
+  origin: process.env.CORS_ORIGIN?.split(',') ?? false,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Correlation-Id'],
   exposedHeaders: ['X-Correlation-Id'],

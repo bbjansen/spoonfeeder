@@ -73,6 +73,10 @@ export default async function addRecipeGenerator(
   }
 
   // 1. Add dependencies to package.json
+  if (!tree.exists('package.json')) {
+    throw new Error('package.json not found. Is this a valid project?');
+  }
+
   if (
     Object.keys(recipe.dependencies).length > 0 ||
     Object.keys(recipe.devDependencies).length > 0
@@ -164,6 +168,25 @@ export default async function addRecipeGenerator(
         content += `\n${marker}\n${recipe.claudeMdSection}\n<!-- @spoonfeeder:end:${recipeId} -->\n`;
         tree.write(claudePath, content);
       }
+    }
+  }
+
+  if (recipe.copilotInstructions) {
+    const copilotPath = '.github/copilot-instructions.md';
+    if (tree.exists(copilotPath)) {
+      let content = tree.read(copilotPath, 'utf-8')!;
+      const marker = `<!-- @spoonfeeder:${recipeId} -->`;
+      if (!content.includes(marker)) {
+        content += `\n${marker}\n${recipe.copilotInstructions}\n<!-- @spoonfeeder:end:${recipeId} -->\n`;
+        tree.write(copilotPath, content);
+      }
+    }
+  }
+
+  if (recipe.cursorRules) {
+    const cursorRulePath = `.cursor/rules/${recipeId}.mdc`;
+    if (!tree.exists(cursorRulePath)) {
+      tree.write(cursorRulePath, recipe.cursorRules);
     }
   }
 

@@ -6,7 +6,7 @@ Auto-generated back-office administration panels for managing entities without b
 
 | Recipe  | Library                                        | Best For                                            | Recipe README                                                 |
 | ------- | ---------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------- |
-| AdminJS | [AdminJS](https://adminjs.co/) + NestJS plugin | Internal tools, CRUD dashboards, content management | [adminjs](../../packages/templates/recipes/adminjs/README.md) |
+| AdminJS | [AdminJS](https://adminjs.co/) + NestJS plugin | Internal tools, CRUD dashboards, content management | [adminjs](../../templates/recipes/adminjs/README.md) |
 
 ## When to Use
 

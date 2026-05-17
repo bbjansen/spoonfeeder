@@ -6,7 +6,7 @@ Command Query Responsibility Segregation for NestJS. Separate read and write ope
 
 | Recipe | Description                                             | Recipe README                                           |
 | ------ | ------------------------------------------------------- | ------------------------------------------------------- |
-| CQRS   | Commands, queries, events, and sagas via `@nestjs/cqrs` | [cqrs](../../packages/templates/recipes/cqrs/README.md) |
+| CQRS   | Commands, queries, events, and sagas via `@nestjs/cqrs` | [cqrs](../../templates/recipes/cqrs/README.md) |
 
 ## Concepts
 

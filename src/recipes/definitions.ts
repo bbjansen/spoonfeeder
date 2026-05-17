@@ -21,7 +21,7 @@ const recipes: RecipeDefinition[] = [
       { key: 'DB_PASSWORD', defaultValue: 'postgres', description: 'PostgreSQL password' },
       { key: 'DB_NAME', defaultValue: 'app', description: 'PostgreSQL database name' },
     ],
-    conflicts: ['typeorm-mysql', 'prisma', 'mongoose'],
+    conflicts: ['typeorm-mysql', 'prisma', 'mongoose', 'drizzle-postgres', 'kysely', 'mikro-orm'],
     requires: [],
     compatibleWith: 'all',
     templateDir: 'typeorm-postgres',
@@ -57,7 +57,7 @@ const recipes: RecipeDefinition[] = [
       { key: 'DB_PASSWORD', defaultValue: 'root', description: 'MySQL password' },
       { key: 'DB_NAME', defaultValue: 'app', description: 'MySQL database name' },
     ],
-    conflicts: ['typeorm-postgres', 'prisma', 'mongoose'],
+    conflicts: ['typeorm-postgres', 'prisma', 'mongoose', 'drizzle-postgres', 'kysely', 'mikro-orm'],
     requires: [],
     compatibleWith: 'all',
     templateDir: 'typeorm-mysql',
@@ -93,7 +93,7 @@ const recipes: RecipeDefinition[] = [
         description: 'Prisma database connection URL',
       },
     ],
-    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'mongoose'],
+    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'mongoose', 'drizzle-postgres', 'kysely', 'mikro-orm'],
     requires: [],
     compatibleWith: 'all',
     templateDir: 'prisma',
@@ -128,7 +128,7 @@ const recipes: RecipeDefinition[] = [
         description: 'MongoDB connection URI',
       },
     ],
-    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'prisma'],
+    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'prisma', 'drizzle-postgres', 'kysely', 'mikro-orm'],
     requires: [],
     compatibleWith: 'all',
     templateDir: 'mongoose',
@@ -166,7 +166,7 @@ const recipes: RecipeDefinition[] = [
         description: 'PostgreSQL connection URL',
       },
     ],
-    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'prisma', 'mongoose'],
+    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'prisma', 'mongoose', 'kysely', 'mikro-orm'],
     requires: [],
     compatibleWith: 'all',
     templateDir: 'drizzle-postgres',
@@ -238,7 +238,7 @@ const recipes: RecipeDefinition[] = [
       { key: 'DB_USERNAME', defaultValue: 'postgres', description: 'PostgreSQL username' },
       { key: 'DB_PASSWORD', defaultValue: 'postgres', description: 'PostgreSQL password' },
     ],
-    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'prisma', 'mongoose', 'drizzle-postgres'],
+    conflicts: ['typeorm-postgres', 'typeorm-mysql', 'prisma', 'mongoose', 'drizzle-postgres', 'kysely'],
     requires: [],
     compatibleWith: 'all',
     templateDir: 'mikro-orm',
@@ -266,6 +266,7 @@ const recipes: RecipeDefinition[] = [
       { key: 'REDIS_HOST', defaultValue: 'localhost', description: 'Redis host' },
       { key: 'REDIS_PORT', defaultValue: '6379', description: 'Redis port' },
       { key: 'REDIS_PASSWORD', defaultValue: '', description: 'Redis password (empty for local)' },
+      { key: 'REDIS_TTL', defaultValue: '300', description: 'Default cache TTL in seconds' },
     ],
     conflicts: [],
     requires: [],
@@ -605,7 +606,7 @@ const recipes: RecipeDefinition[] = [
     description: 'Auto-generated OpenAPI documentation with Swagger UI',
     category: 'API Docs',
     dependencies: {
-      '@nestjs/swagger': '8.1.0',
+      '@nestjs/swagger': '11.4.2',
       '@fastify/static': '8.1.0',
     },
     devDependencies: {},
@@ -794,7 +795,6 @@ const recipes: RecipeDefinition[] = [
     category: 'Error Tracking',
     dependencies: {
       '@sentry/nestjs': '8.48.0',
-      '@sentry/node': '8.48.0',
     },
     devDependencies: {},
     envVars: [
@@ -803,6 +803,11 @@ const recipes: RecipeDefinition[] = [
         key: 'SENTRY_ENVIRONMENT',
         defaultValue: 'development',
         description: 'Sentry environment tag',
+      },
+      {
+        key: 'SENTRY_TRACES_SAMPLE_RATE',
+        defaultValue: '1.0',
+        description: 'Sentry performance traces sample rate',
       },
     ],
     conflicts: [],
@@ -878,8 +883,8 @@ const recipes: RecipeDefinition[] = [
       },
       { key: 'S3_REGION', defaultValue: 'us-east-1', description: 'S3 region' },
       { key: 'S3_BUCKET', defaultValue: 'app-uploads', description: 'Default S3 bucket name' },
-      { key: 'S3_ACCESS_KEY', defaultValue: 'minioadmin', description: 'S3/MinIO access key' },
-      { key: 'S3_SECRET_KEY', defaultValue: 'minioadmin', description: 'S3/MinIO secret key' },
+      { key: 'S3_ACCESS_KEY_ID', defaultValue: 'minioadmin', description: 'S3/MinIO access key' },
+      { key: 'S3_SECRET_ACCESS_KEY', defaultValue: 'minioadmin', description: 'S3/MinIO secret key' },
     ],
     conflicts: [],
     requires: [],
@@ -909,6 +914,7 @@ const recipes: RecipeDefinition[] = [
     dependencies: {
       '@nestjs-modules/mailer': '2.0.2',
       nodemailer: '6.9.16',
+      handlebars: '4.7.8',
     },
     devDependencies: {
       '@types/nodemailer': '6.4.17',
@@ -1023,9 +1029,7 @@ const recipes: RecipeDefinition[] = [
       graphql: '16.9.0',
     },
     devDependencies: {},
-    envVars: [
-      { key: 'GRAPHQL_PLAYGROUND', defaultValue: 'true', description: 'Enable GraphQL playground' },
-    ],
+    envVars: [],
     conflicts: [],
     requires: [],
     compatibleWith: ['http-api', 'aws-lambda', 'full-stack', 'monorepo'],
@@ -1033,7 +1037,7 @@ const recipes: RecipeDefinition[] = [
     claudeMdSection: [
       '## GraphQL (Mercurius)',
       'Code-first approach: define @ObjectType() and @Resolver() classes. Schema is auto-generated.',
-      'GraphQL playground is available at `/graphql` when GRAPHQL_PLAYGROUND is enabled.',
+      'GraphQL playground is available at `/graphql` in non-production environments.',
     ].join('\n'),
     cursorRules: [
       'Use code-first approach with @ObjectType(), @Field(), @Resolver(), @Query(), @Mutation().',
@@ -1240,16 +1244,16 @@ const recipes: RecipeDefinition[] = [
     templateDir: 'pagination',
     claudeMdSection: [
       '## Pagination',
-      'Use PaginationDto for query params (page, limit). PaginatedResponse<T> wraps results with metadata.',
-      'Supports both offset-based and cursor-based pagination. Prefer cursor for large datasets.',
+      'Use PaginatedQuery for query params (page, limit). PaginatedResponse<T> wraps results with metadata.',
+      'Supports offset-based pagination. Use PaginatedQuery.skip for database offset calculations.',
     ].join('\n'),
     cursorRules: [
-      'Use PaginationDto for pagination query params. Return PaginatedResponse<T> from endpoints.',
-      'Default page size is configurable. Use cursor-based pagination for infinite-scroll UIs.',
+      'Use PaginatedQuery for pagination query params. Return PaginatedResponse<T> from endpoints.',
+      'Default page size is 20, max 100. Use PaginatedQuery.skip for offset calculations.',
     ].join('\n'),
     copilotInstructions: [
-      'Pagination uses PaginationDto and PaginatedResponse<T>. Offset and cursor modes available.',
-      'Apply @Query() PaginationDto to controller methods. Service returns paginated wrapper.',
+      'Pagination uses PaginatedQuery and PaginatedResponse<T>. Offset-based with skip/limit.',
+      'Apply @Query() PaginatedQuery to controller methods. Service returns PaginatedResponse<T> wrapper.',
     ].join('\n'),
   },
   {
@@ -1321,15 +1325,15 @@ const recipes: RecipeDefinition[] = [
     claudeMdSection: [
       '## Correlation ID',
       'Every request gets a correlation ID (from x-correlation-id header or auto-generated UUID).',
-      'Access via CorrelationService.getId(). Propagate to downstream HTTP calls and log entries.',
+      'Access via getCorrelationId() from anywhere in the async call chain. Propagate to downstream HTTP calls and log entries.',
     ].join('\n'),
     cursorRules: [
-      'Correlation ID is set via middleware using AsyncLocalStorage. Access via CorrelationService.',
+      'Correlation ID is set via CorrelationIdMiddleware using AsyncLocalStorage. Access via getCorrelationId().',
       'Always forward the correlation ID in outgoing HTTP calls and include it in log context.',
     ].join('\n'),
     copilotInstructions: [
       'Correlation IDs track requests across services. Auto-generated or from x-correlation-id header.',
-      'Use CorrelationService.getId() to access. Propagate in outgoing HTTP headers and logs.',
+      'Use getCorrelationId() to access from anywhere in the async call chain. Propagate in outgoing HTTP headers and logs.',
     ].join('\n'),
   },
 
@@ -1361,7 +1365,6 @@ const recipes: RecipeDefinition[] = [
     category: 'Observability',
     dependencies: {
       '@opentelemetry/sdk-node': '0.57.0',
-      '@opentelemetry/auto-instrumentations-node': '0.55.0',
       '@opentelemetry/exporter-trace-otlp-http': '0.57.0',
       '@opentelemetry/instrumentation-http': '0.57.0',
       '@opentelemetry/instrumentation-fastify': '0.44.0',
@@ -2015,15 +2018,15 @@ const recipes: RecipeDefinition[] = [
     templateDir: 'cloud-aws/s3',
     claudeMdSection: [
       '## AWS S3',
-      'Use S3StorageService for uploads, downloads, and presigned URLs.',
+      'Use S3Service for uploads, downloads, and presigned URLs.',
       'Configure bucket name via S3_BUCKET. Use presigned URLs for client-side uploads.',
     ].join('\n'),
     cursorRules: [
-      'Use S3StorageService abstraction for all S3 operations. Never expose AWS credentials to clients.',
+      'Use S3Service abstraction for all S3 operations. Never expose AWS credentials to clients.',
       'Generate presigned URLs for direct browser uploads. Set appropriate content-type and size limits.',
     ].join('\n'),
     copilotInstructions: [
-      'AWS S3 via @aws-sdk/client-s3. Use S3StorageService for file operations.',
+      'AWS S3 via @aws-sdk/client-s3. Use S3Service for file operations.',
       'Presigned URLs for client uploads. Bucket name from S3_BUCKET env var.',
     ].join('\n'),
   },
@@ -2210,17 +2213,15 @@ const recipes: RecipeDefinition[] = [
     },
     devDependencies: {},
     envVars: [
-      { key: 'AWS_REGION', defaultValue: 'eu-west-1', description: 'AWS region' },
-      {
-        key: 'CLOUDFRONT_DISTRIBUTION_ID',
-        defaultValue: '',
-        description: 'CloudFront distribution ID',
-      },
-      { key: 'CLOUDFRONT_DOMAIN', defaultValue: '', description: 'CloudFront distribution domain' },
       {
         key: 'CLOUDFRONT_KEY_PAIR_ID',
         defaultValue: '',
         description: 'CloudFront key pair ID for signed URLs',
+      },
+      {
+        key: 'CLOUDFRONT_PRIVATE_KEY',
+        defaultValue: '',
+        description: 'CloudFront private key for signed URLs',
       },
     ],
     conflicts: [],
@@ -2585,7 +2586,7 @@ const recipes: RecipeDefinition[] = [
     devDependencies: {},
     envVars: [
       {
-        key: 'AZURE_SERVICEBUS_CONNECTION_STRING',
+        key: 'AZURE_SERVICE_BUS_CONNECTION_STRING',
         defaultValue: '',
         description: 'Service Bus connection string',
       },
@@ -2601,7 +2602,7 @@ const recipes: RecipeDefinition[] = [
       'Use sessions for ordered processing. Dead-letter queues handle poison messages.',
     ].join('\n'),
     cursorRules: [
-      'Use ServiceBusService for messaging. Connection string from AZURE_SERVICEBUS_CONNECTION_STRING.',
+      'Use ServiceBusService for messaging. Connection string from AZURE_SERVICE_BUS_CONNECTION_STRING.',
       'Complete messages after processing. Use sessions for FIFO. Configure dead-letter queues.',
     ].join('\n'),
     copilotInstructions: [
@@ -2621,7 +2622,7 @@ const recipes: RecipeDefinition[] = [
     devDependencies: {},
     envVars: [
       {
-        key: 'AZURE_KEYVAULT_URL',
+        key: 'AZURE_KEY_VAULT_URL',
         defaultValue: '',
         description: 'Key Vault URL (https://<name>.vault.azure.net)',
       },
@@ -2637,11 +2638,11 @@ const recipes: RecipeDefinition[] = [
     ].join('\n'),
     cursorRules: [
       'Use KeyVaultService for secrets. Authenticate with DefaultAzureCredential.',
-      'Cache secrets locally. Set AZURE_KEYVAULT_URL from env. Use managed identities in production.',
+      'Cache secrets locally. Set AZURE_KEY_VAULT_URL from env. Use managed identities in production.',
     ].join('\n'),
     copilotInstructions: [
       'Azure Key Vault via @azure/keyvault-secrets. Use KeyVaultService wrapper.',
-      'AZURE_KEYVAULT_URL from env. DefaultAzureCredential for authentication.',
+      'AZURE_KEY_VAULT_URL from env. DefaultAzureCredential for authentication.',
     ].join('\n'),
   },
   {
@@ -2656,14 +2657,14 @@ const recipes: RecipeDefinition[] = [
     devDependencies: {},
     envVars: [
       {
-        key: 'AZURE_STORAGE_CONNECTION_STRING',
+        key: 'AZURE_STORAGE_ACCOUNT_NAME',
         defaultValue: '',
-        description: 'Azure Storage connection string',
+        description: 'Azure Storage account name',
       },
       {
-        key: 'AZURE_STORAGE_CONTAINER',
-        defaultValue: 'uploads',
-        description: 'Blob container name',
+        key: 'AZURE_STORAGE_ACCOUNT_KEY',
+        defaultValue: '',
+        description: 'Azure Storage account key',
       },
     ],
     conflicts: [],
@@ -2673,15 +2674,15 @@ const recipes: RecipeDefinition[] = [
     claudeMdSection: [
       '## Azure Blob Storage',
       'Use BlobStorageService for uploads, downloads, and SAS URL generation.',
-      'Configure connection string and container name via environment variables.',
+      'Configure account name and key via environment variables.',
     ].join('\n'),
     cursorRules: [
       'Use BlobStorageService for all blob operations. Generate SAS URLs for client uploads.',
-      'Connection string from env. Use managed identity (DefaultAzureCredential) in production.',
+      'Account name and key from env. Use managed identity (DefaultAzureCredential) in production.',
     ].join('\n'),
     copilotInstructions: [
       'Azure Blob Storage via @azure/storage-blob. Use BlobStorageService wrapper.',
-      'Connection string from env. SAS URLs for client-side uploads. Managed identity in prod.',
+      'Account name and key from env. SAS URLs for client-side uploads. Managed identity in prod.',
     ].join('\n'),
   },
   {
@@ -2804,9 +2805,13 @@ const recipes: RecipeDefinition[] = [
     },
     devDependencies: {},
     envVars: [
-      { key: 'COSMOS_ENDPOINT', defaultValue: '', description: 'Cosmos DB account endpoint' },
-      { key: 'COSMOS_KEY', defaultValue: '', description: 'Cosmos DB account key' },
-      { key: 'COSMOS_DATABASE', defaultValue: 'app', description: 'Cosmos DB database name' },
+      { key: 'AZURE_COSMOS_ENDPOINT', defaultValue: '', description: 'Cosmos DB account endpoint' },
+      { key: 'AZURE_COSMOS_KEY', defaultValue: '', description: 'Cosmos DB account key' },
+      {
+        key: 'AZURE_COSMOS_DATABASE',
+        defaultValue: 'app',
+        description: 'Cosmos DB database name',
+      },
     ],
     conflicts: [],
     requires: [],

@@ -11,15 +11,6 @@
       "$default": { "$source": "argv", "index": 0 },
       "x-prompt": "Which recipe do you want to add?"
     },
-    "project": {
-      "type": "string",
-      "description": "Target project (for monorepo)"
-    },
-    "dryRun": {
-      "type": "boolean",
-      "default": false,
-      "description": "Preview changes without applying"
-    },
     "skipInstall": {
       "type": "boolean",
       "default": false,

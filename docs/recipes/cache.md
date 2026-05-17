@@ -6,7 +6,7 @@ Redis-based caching for NestJS applications. Reduce database load and improve re
 
 | Recipe      | Description                                    | Recipe README                                                         |
 | ----------- | ---------------------------------------------- | --------------------------------------------------------------------- |
-| Redis Cache | Cache manager backed by Redis with TTL support | [redis-cache](../../packages/templates/recipes/redis-cache/README.md) |
+| Redis Cache | Cache manager backed by Redis with TTL support | [redis-cache](../../templates/recipes/redis-cache/README.md) |
 
 ## Usage Patterns
 

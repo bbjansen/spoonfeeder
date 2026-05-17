@@ -6,7 +6,7 @@ Multipart file upload, validation, and streaming for NestJS applications.
 
 | Recipe      | Approach                         | Best For                                  | Recipe README                                                         |
 | ----------- | -------------------------------- | ----------------------------------------- | --------------------------------------------------------------------- |
-| File Upload | Fastify multipart with streaming | Avatar uploads, document ingestion, media | [file-upload](../../packages/templates/recipes/file-upload/README.md) |
+| File Upload | Fastify multipart with streaming | Avatar uploads, document ingestion, media | [file-upload](../../templates/recipes/file-upload/README.md) |
 
 ## When to Use
 
@@ -14,7 +14,7 @@ Multipart file upload, validation, and streaming for NestJS applications.
 - **Bulk imports** — CSV or Excel files processed server-side.
 - **Streaming large files** — avoid loading entire files into memory by piping to S3 or disk.
 
-Pair with the [S3/MinIO recipe](../../packages/templates/recipes/s3-minio/README.md) to persist uploaded files to object storage.
+Pair with the [S3/MinIO recipe](../../templates/recipes/s3-minio/README.md) to persist uploaded files to object storage.
 
 ## Upload Strategies
 

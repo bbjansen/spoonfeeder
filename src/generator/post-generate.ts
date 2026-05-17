@@ -8,9 +8,11 @@ export async function runPostGenerate(outputDir: string): Promise<void> {
     s.start('Installing dependencies...');
     await execa('pnpm', ['install'], { cwd: outputDir });
     s.stop('Dependencies installed.');
-  } catch {
+  } catch (error) {
     s.stop('Dependency installation failed.');
-    p.log.warning('Could not install dependencies. Run `pnpm install` manually.');
+    p.log.warning(
+      `Could not install dependencies: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 
   try {
@@ -21,8 +23,10 @@ export async function runPostGenerate(outputDir: string): Promise<void> {
       cwd: outputDir,
     });
     s.stop('Git repository initialized.');
-  } catch {
+  } catch (error) {
     s.stop('Git initialization failed.');
-    p.log.warning('Could not initialize git. Run `git init` manually.');
+    p.log.warning(
+      `Could not initialize git: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }

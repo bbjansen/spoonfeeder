@@ -6,8 +6,8 @@ Environment variable validation and per-environment configuration for NestJS app
 
 | Recipe              | Approach                        | Best For                                       | Recipe README                                                                         |
 | ------------------- | ------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Config Validation   | Zod schema at startup           | Type-safe config, fast-fail on missing vars    | [config-validation](../../packages/templates/recipes/config-validation/README.md)     |
-| Env per Environment | Separate `.env` files per stage | Dev/test/prod with different secrets and hosts | [env-per-environment](../../packages/templates/recipes/env-per-environment/README.md) |
+| Config Validation   | Zod schema at startup           | Type-safe config, fast-fail on missing vars    | [config-validation](../../templates/recipes/config-validation/README.md)     |
+| Env per Environment | Separate `.env` files per stage | Dev/test/prod with different secrets and hosts | [env-per-environment](../../templates/recipes/env-per-environment/README.md) |
 
 ## When to Use Each
 

@@ -6,7 +6,7 @@ GraphQL API layer for NestJS using Mercurius (Fastify-based) for high-performanc
 
 | Recipe    | Engine              | Best For                           | Recipe README                                                                     |
 | --------- | ------------------- | ---------------------------------- | --------------------------------------------------------------------------------- |
-| Mercurius | Fastify + Mercurius | Performant GraphQL APIs on Fastify | [graphql-mercurius](../../packages/templates/recipes/graphql-mercurius/README.md) |
+| Mercurius | Fastify + Mercurius | Performant GraphQL APIs on Fastify | [graphql-mercurius](../../templates/recipes/graphql-mercurius/README.md) |
 
 ## Overview
 

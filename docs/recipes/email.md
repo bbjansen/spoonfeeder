@@ -6,8 +6,8 @@ Email sending for NestJS. Choose between SMTP-based sending or a managed email A
 
 | Recipe     | Transport           | Best For                               | Recipe README                                                       |
 | ---------- | ------------------- | -------------------------------------- | ------------------------------------------------------------------- |
-| Nodemailer | SMTP / SES / custom | Full control, SMTP servers, AWS SES    | [nodemailer](../../packages/templates/recipes/nodemailer/README.md) |
-| SendGrid   | REST API            | Managed delivery, templates, analytics | [sendgrid](../../packages/templates/recipes/sendgrid/README.md)     |
+| Nodemailer | SMTP / SES / custom | Full control, SMTP servers, AWS SES    | [nodemailer](../../templates/recipes/nodemailer/README.md) |
+| SendGrid   | REST API            | Managed delivery, templates, analytics | [sendgrid](../../templates/recipes/sendgrid/README.md)     |
 
 ## Comparison
 

@@ -1,0 +1,97 @@
+site_name: spoonfeeder
+site_url: https://bbjansen.github.io/spoonfeeder/
+site_description: NestJS project scaffolder with 112 composable recipes
+site_author: B.B. Jansen
+repo_url: https://github.com/bbjansen/spoonfeeder
+repo_name: bbjansen/spoonfeeder
+edit_uri: edit/main/site-docs/
+docs_dir: site-docs
+
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Quick Start: getting-started/quick-start.md
+    - Project Types: getting-started/project-types.md
+  - Recipes:
+    - Overview: recipes/index.md
+    - Database: recipes/database.md
+    - Authentication: recipes/auth.md
+    - Security: recipes/security.md
+    - Cloud - AWS: recipes/cloud-aws.md
+    - Cloud - GCP: recipes/cloud-gcp.md
+    - Cloud - Azure: recipes/cloud-azure.md
+    - API Patterns: recipes/api-patterns.md
+    - Observability: recipes/observability.md
+    - Queues & Messaging: recipes/queues.md
+    - Developer Experience: recipes/dx.md
+    - Full Recipe List: recipes/all.md
+  - Nx Generators:
+    - Overview: generators/index.md
+    - Add Recipe: generators/add.md
+    - Remove Recipe: generators/remove.md
+    - Migrate Recipe: generators/migrate.md
+  - Architecture:
+    - Overview: architecture/index.md
+    - Error Handling: architecture/error-handling.md
+    - Standards: architecture/standards.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - tables
+  - toc:
+      permalink: true
+
+copyright: Copyright &copy; 2026 BBJ Systems Holding
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/bbjansen/spoonfeeder
+    - icon: fontawesome/brands/npm
+      link: https://www.npmjs.com/package/spoonfeeder

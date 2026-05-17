@@ -15,6 +15,12 @@ No additional dependencies required. Uses built-in NestJS lifecycle hooks.
 | ------- | ------- | -------------------------------- |
 | (none)  | -       | Built-in NestJS lifecycle events |
 
+## Environment Variables
+
+| Variable              | Default | Description                        |
+| --------------------- | ------- | ---------------------------------- |
+| `SHUTDOWN_TIMEOUT_MS` | `10000` | Max wait time for graceful shutdown |
+
 ## Usage
 
 Enable shutdown hooks in `main.ts`:
@@ -27,28 +33,28 @@ app.enableShutdownHooks();
 await app.listen(3000, '0.0.0.0');
 ```
 
-Implement lifecycle hooks in services that hold connections:
+Register cleanup functions with `ShutdownService`:
 
 ```typescript
-import { Injectable, OnModuleDestroy, OnApplicationShutdown } from '@nestjs/common';
+import { ShutdownService } from '@/shared/lifecycle/shutdown.service';
 
 @Injectable()
-export class DatabaseService implements OnModuleDestroy, OnApplicationShutdown {
-  async onModuleDestroy(): Promise<void> {
-    // Stop accepting new work
-    this.logger.log('Stopping database service...');
-  }
+export class DatabaseService implements OnModuleInit {
+  constructor(private readonly shutdownService: ShutdownService) {}
 
-  async onApplicationShutdown(signal?: string): Promise<void> {
-    // Close connections
-    this.logger.log(`Shutting down (signal: ${signal}), closing DB pool...`);
-    await this.pool.end();
+  onModuleInit(): void {
+    this.shutdownService.registerCleanup(async () => {
+      await this.pool.end();
+    });
   }
 }
 ```
 
+The `ShutdownService` reads `SHUTDOWN_TIMEOUT_MS` from the environment. If cleanup
+functions take longer than this timeout, the shutdown proceeds and logs an error.
+
 ## Generated Files
 
-| File   | Description                                               |
-| ------ | --------------------------------------------------------- |
-| (none) | Applied directly in `main.ts` via `enableShutdownHooks()` |
+| File                                       | Description                                                   |
+| ------------------------------------------ | ------------------------------------------------------------- |
+| `src/shared/lifecycle/shutdown.service.ts` | Shutdown service with configurable timeout and cleanup registry |

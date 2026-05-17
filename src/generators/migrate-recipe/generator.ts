@@ -4,6 +4,7 @@ import { RecipeRegistry } from '../../recipes/registry.js';
 import { registerAllRecipes } from '../../recipes/definitions.js';
 import type { RecipeDefinition, RecipeId } from '../../types.js';
 import type { SpoonfeederManifest } from '../../utils/recipe-manifest.js';
+import { findDependents } from '../../utils/dependency-checker.js';
 import removeRecipeGenerator from '../remove-recipe/generator.js';
 import addRecipeGenerator from '../add-recipe/generator.js';
 import { getMigrationGuidance } from './migration-guidance.js';
@@ -74,6 +75,34 @@ export default async function migrateRecipeGenerator(
     installedRecipeIds,
   );
 
+  // Check if any installed recipes depend on the 'from' recipe
+  const allInstalledRecipes = installedRecipeIds
+    .map((id) => registry.get(id as RecipeId))
+    .filter(Boolean) as RecipeDefinition[];
+
+  const dependents = findDependents(
+    options.from as RecipeId,
+    installedRecipeIds,
+    allInstalledRecipes,
+  );
+
+  if (dependents.length > 0) {
+    // Check if the 'to' recipe satisfies the dependency (i.e. dependents require 'from' but 'to' could replace it)
+    const toRecipeId = options.to as RecipeId;
+    const unsatisfiedDependents = dependents.filter((dep) => {
+      const depRecipe = registry.get(dep.recipeId);
+      // The dependent is unsatisfied if it requires the 'from' recipe and the 'to' recipe does not satisfy it
+      return !depRecipe?.requires.includes(toRecipeId);
+    });
+
+    if (unsatisfiedDependents.length > 0) {
+      const names = unsatisfiedDependents.map((d) => `'${d.recipeName}' (${d.recipeId})`).join(', ');
+      throw new Error(
+        `Cannot migrate from '${options.from}' to '${options.to}': the following installed recipes depend on '${options.from}': ${names}. Remove or migrate those recipes first.`,
+      );
+    }
+  }
+
   logger.info(`Migrating from '${fromRecipe.name}' to '${toRecipe.name}'...`);
   logger.info('');
 
@@ -81,17 +110,13 @@ export default async function migrateRecipeGenerator(
   logger.info(`Step 1/2: Removing '${fromRecipe.name}'...`);
   await removeRecipeGenerator(tree, {
     recipe: options.from,
-    project: options.project,
     force: true,
-    dryRun: options.dryRun,
   });
 
   // Step 2: Add the new recipe
   logger.info(`Step 2/2: Adding '${toRecipe.name}'...`);
   await addRecipeGenerator(tree, {
     recipe: options.to,
-    project: options.project,
-    dryRun: options.dryRun,
     skipInstall: false,
   });
 
@@ -111,9 +136,5 @@ export default async function migrateRecipeGenerator(
   logger.info('\u2501'.repeat(70));
   logger.info('');
 
-  if (options.dryRun) {
-    logger.info('Dry run complete. No files were changed.');
-  } else {
-    logger.info(`Migration from '${fromRecipe.name}' to '${toRecipe.name}' complete.`);
-  }
+  logger.info(`Migration from '${fromRecipe.name}' to '${toRecipe.name}' complete.`);
 }

@@ -6,9 +6,9 @@ Patterns for improving throughput, resilience, and response times in NestJS appl
 
 | Recipe          | Pattern / Tool                 | Best For                                        | Recipe README                                                                 |
 | --------------- | ------------------------------ | ----------------------------------------------- | ----------------------------------------------------------------------------- |
-| Worker Threads  | Node.js `worker_threads`       | CPU-intensive tasks (image processing, hashing) | [worker-threads](../../packages/templates/recipes/worker-threads/README.md)   |
-| Circuit Breaker | Opossum circuit breaker        | Fault tolerance for external service calls      | [circuit-breaker](../../packages/templates/recipes/circuit-breaker/README.md) |
-| HTTP Caching    | RFC 9111 Cache-Control headers | Reducing redundant responses, CDN integration   | [http-caching](../../packages/templates/recipes/http-caching/README.md)       |
+| Worker Threads  | Node.js `worker_threads`       | CPU-intensive tasks (image processing, hashing) | [worker-threads](../../templates/recipes/worker-threads/README.md)   |
+| Circuit Breaker | Opossum circuit breaker        | Fault tolerance for external service calls      | [circuit-breaker](../../templates/recipes/circuit-breaker/README.md) |
+| HTTP Caching    | RFC 9111 Cache-Control headers | Reducing redundant responses, CDN integration   | [http-caching](../../templates/recipes/http-caching/README.md)       |
 
 ## When to Use Each
 

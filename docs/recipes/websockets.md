@@ -6,7 +6,7 @@ Real-time bidirectional communication for NestJS using WebSocket gateways.
 
 | Recipe     | Library                            | Best For                                               | Recipe README                                                       |
 | ---------- | ---------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------- |
-| WebSockets | Socket.io via `@nestjs/websockets` | Real-time events, chat, live dashboards, notifications | [websockets](../../packages/templates/recipes/websockets/README.md) |
+| WebSockets | Socket.io via `@nestjs/websockets` | Real-time events, chat, live dashboards, notifications | [websockets](../../templates/recipes/websockets/README.md) |
 
 ## Architecture
 

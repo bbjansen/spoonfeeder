@@ -26,7 +26,13 @@ const MANIFEST_FILE = '.spoonfeeder.json';
 export function readManifest(projectDir: string): SpoonfeederManifest | null {
   const filePath = path.join(projectDir, MANIFEST_FILE);
   if (!fs.existsSync(filePath)) return null;
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as SpoonfeederManifest;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as SpoonfeederManifest;
+  } catch (e) {
+    throw new Error(
+      `.spoonfeeder.json contains invalid JSON: ${e instanceof Error ? e.message : String(e)}`,
+    );
+  }
 }
 
 export function writeManifest(projectDir: string, manifest: SpoonfeederManifest): void {
@@ -45,7 +51,7 @@ export function addRecipeToManifest(
   manifest.recipes[recipeId] = {
     ...entry,
     installedAt: new Date().toISOString(),
-    version: manifest.spoonfeederVersion,
+    version: manifest.spoonfeederVersion ?? '0.0.1',
   };
 
   writeManifest(projectDir, manifest);

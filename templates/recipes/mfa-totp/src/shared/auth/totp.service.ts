@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { randomBytes } from 'node:crypto';
 import { authenticator } from 'otplib';
 import * as QRCode from 'qrcode';
 
@@ -19,7 +20,7 @@ export class TotpService {
 
   generateBackupCodes(count: number = 10): string[] {
     return Array.from({ length: count }, () =>
-      Math.random().toString(36).substring(2, 8).toUpperCase(),
+      randomBytes(4).toString('hex').toUpperCase().slice(0, 6),
     );
   }
 }

@@ -6,9 +6,9 @@ End-to-end observability for NestJS. Instrument your application with OpenTeleme
 
 | Recipe              | Purpose                                     | Recipe README                                                                         |
 | ------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------- |
-| OpenTelemetry       | Auto-instrumentation for traces and metrics | [opentelemetry](../../packages/templates/recipes/opentelemetry/README.md)             |
-| Request Logging     | Structured HTTP request/response logging    | [request-logging](../../packages/templates/recipes/request-logging/README.md)         |
-| Distributed Tracing | Cross-service trace propagation             | [distributed-tracing](../../packages/templates/recipes/distributed-tracing/README.md) |
+| OpenTelemetry       | Auto-instrumentation for traces and metrics | [opentelemetry](../../templates/recipes/opentelemetry/README.md)             |
+| Request Logging     | Structured HTTP request/response logging    | [request-logging](../../templates/recipes/request-logging/README.md)         |
+| Distributed Tracing | Cross-service trace propagation             | [distributed-tracing](../../templates/recipes/distributed-tracing/README.md) |
 
 ## The Three Pillars
 

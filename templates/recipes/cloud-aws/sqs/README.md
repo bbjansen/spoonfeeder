@@ -24,26 +24,24 @@ Amazon Simple Queue Service integration for reliable message queuing in NestJS.
 ## Usage
 
 ```typescript
-import { SqsService } from '@/aws/sqs.service';
+import { SqsService } from '@/infrastructure/aws/sqs.service';
 
 @Injectable()
 export class OrderProcessor {
-  constructor(private readonly sqs: SqsService) {}
+  constructor(
+    private readonly sqs: SqsService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async enqueue(order: Order): Promise<void> {
-    await this.sqs.sendMessage({
-      QueueUrl: this.configService.get('SQS_QUEUE_URL'),
-      MessageBody: JSON.stringify(order),
-    });
+    const queueUrl = this.configService.get<string>('SQS_QUEUE_URL');
+    await this.sqs.sendMessage(queueUrl, JSON.stringify(order));
   }
 
   async poll(): Promise<Order[]> {
-    const response = await this.sqs.receiveMessages({
-      QueueUrl: this.configService.get('SQS_QUEUE_URL'),
-      MaxNumberOfMessages: 10,
-      WaitTimeSeconds: 20,
-    });
-    return (response.Messages ?? []).map((m) => JSON.parse(m.Body));
+    const queueUrl = this.configService.get<string>('SQS_QUEUE_URL');
+    const messages = await this.sqs.receiveMessages(queueUrl, 10, 20);
+    return messages.map((m) => JSON.parse(m.Body!));
   }
 }
 ```

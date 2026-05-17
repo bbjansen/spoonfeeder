@@ -14,7 +14,7 @@ export class WebhookService {
   private readonly secret: string;
 
   constructor(private readonly configService: ConfigService) {
-    this.secret = this.configService.get<string>('WEBHOOK_SECRET', 'change-me');
+    this.secret = this.configService.getOrThrow<string>('WEBHOOK_SECRET');
   }
 
   async deliver(url: string, payload: WebhookPayload): Promise<boolean> {

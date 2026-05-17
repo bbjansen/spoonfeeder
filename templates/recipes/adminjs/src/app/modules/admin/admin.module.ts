@@ -26,8 +26,10 @@ import AdminJS from 'adminjs';
         },
         auth: {
           authenticate: async (email: string, password: string) => {
-            const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@example.com';
-            const adminPassword = process.env.ADMIN_PASSWORD ?? 'changeme';
+            const adminEmail = process.env.ADMIN_EMAIL;
+            const adminPassword = process.env.ADMIN_PASSWORD;
+            if (!adminEmail) throw new Error('ADMIN_EMAIL environment variable is required');
+            if (!adminPassword) throw new Error('ADMIN_PASSWORD environment variable is required');
 
             if (email === adminEmail && password === adminPassword) {
               return { email: adminEmail };
@@ -35,12 +37,20 @@ import AdminJS from 'adminjs';
             return null;
           },
           cookieName: 'adminjs',
-          cookiePassword: process.env.ADMIN_SESSION_SECRET ?? 'change-me-in-production',
+          cookiePassword: (() => {
+            const secret = process.env.ADMIN_SESSION_SECRET;
+            if (!secret) throw new Error('ADMIN_SESSION_SECRET environment variable is required');
+            return secret;
+          })(),
         },
         sessionOptions: {
           resave: false,
           saveUninitialized: false,
-          secret: process.env.ADMIN_SESSION_SECRET ?? 'change-me-in-production',
+          secret: (() => {
+            const secret = process.env.ADMIN_SESSION_SECRET;
+            if (!secret) throw new Error('ADMIN_SESSION_SECRET environment variable is required');
+            return secret;
+          })(),
         },
       }),
     }),

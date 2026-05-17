@@ -2,6 +2,8 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export function setupSwagger(app: INestApplication): void {
+  if (process.env.SWAGGER_ENABLED === 'false') return;
+
   const config = new DocumentBuilder()
     .setTitle('<%= name %>')
     .setDescription('The <%= name %> API documentation')
@@ -10,7 +12,7 @@ export function setupSwagger(app: INestApplication): void {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document, {
+  SwaggerModule.setup(process.env.SWAGGER_PATH ?? 'api/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },

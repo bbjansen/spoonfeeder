@@ -12,6 +12,8 @@ export interface DeadLetterMessage {
 @Injectable()
 export class DeadLetterQueueService {
   private readonly logger = new Logger(DeadLetterQueueService.name);
+  // TODO: Replace this in-memory store with a persistent backend (Redis, database).
+  // This implementation is for development only — messages are lost on restart and unbounded in memory.
   private readonly messages: DeadLetterMessage[] = [];
 
   add(message: Omit<DeadLetterMessage, 'id' | 'failedAt'>): void {

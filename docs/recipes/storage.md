@@ -6,7 +6,7 @@ Object storage integration for NestJS. Upload, download, and manage files with S
 
 | Recipe     | Provider                                                 | Best For                             | Recipe README                                                   |
 | ---------- | -------------------------------------------------------- | ------------------------------------ | --------------------------------------------------------------- |
-| S3 / MinIO | AWS S3 or S3-compatible (MinIO, R2, DigitalOcean Spaces) | File uploads, media storage, backups | [s3-minio](../../packages/templates/recipes/s3-minio/README.md) |
+| S3 / MinIO | AWS S3 or S3-compatible (MinIO, R2, DigitalOcean Spaces) | File uploads, media storage, backups | [s3-minio](../../templates/recipes/s3-minio/README.md) |
 
 ## Overview
 

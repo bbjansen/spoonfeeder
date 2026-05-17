@@ -6,9 +6,9 @@ Authentication strategies for NestJS. Protect endpoints with JWT tokens, Passpor
 
 | Recipe   | Strategy                            | Best For                                     | Recipe README                                                   |
 | -------- | ----------------------------------- | -------------------------------------------- | --------------------------------------------------------------- |
-| JWT Auth | Bearer token                        | SPAs, mobile apps, stateless APIs            | [jwt-auth](../../packages/templates/recipes/jwt-auth/README.md) |
-| Passport | Strategy-based (local, OAuth, SAML) | Multi-provider auth, SSO                     | [passport](../../packages/templates/recipes/passport/README.md) |
-| API Keys | Static key in header                | Service-to-service, third-party integrations | [api-keys](../../packages/templates/recipes/api-keys/README.md) |
+| JWT Auth | Bearer token                        | SPAs, mobile apps, stateless APIs            | [jwt-auth](../../templates/recipes/jwt-auth/README.md) |
+| Passport | Strategy-based (local, OAuth, SAML) | Multi-provider auth, SSO                     | [passport](../../templates/recipes/passport/README.md) |
+| API Keys | Static key in header                | Service-to-service, third-party integrations | [api-keys](../../templates/recipes/api-keys/README.md) |
 
 ## Comparison
 

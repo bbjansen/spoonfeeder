@@ -11,19 +11,10 @@
       "$default": { "$source": "argv", "index": 0 },
       "x-prompt": "Which recipe do you want to remove?"
     },
-    "project": {
-      "type": "string",
-      "description": "Target project (for monorepo)"
-    },
     "force": {
       "type": "boolean",
       "default": false,
       "description": "Remove even if other recipes depend on it"
-    },
-    "dryRun": {
-      "type": "boolean",
-      "default": false,
-      "description": "Preview changes without applying"
     }
   },
   "required": ["recipe"]

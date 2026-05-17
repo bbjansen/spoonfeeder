@@ -41,4 +41,4 @@ Pin all dependency versions to exact values (`1.2.3`, not `^1.2.3`). Enforce via
 
 ## References
 
-- [CLAUDE.md global rules](../../../CLAUDE.md) — "NEVER use version ranges"
+- `CLAUDE.md` (project root) — "NEVER use version ranges"

@@ -29,18 +29,18 @@ This is **Phase 4 of 4**:
 
 | File                                                                       | Responsibility                                        |
 | -------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `packages/spoonfeeder/src/generators/migrate-recipe/schema.json`           | Nx schema definition                                  |
-| `packages/spoonfeeder/src/generators/migrate-recipe/schema.d.ts`           | TypeScript types for schema                           |
-| `packages/spoonfeeder/src/generators/migrate-recipe/generator.ts`          | Migrate-recipe generator logic                        |
-| `packages/spoonfeeder/src/generators/migrate-recipe/migration-guidance.ts` | Migration guidance messages per recipe pair           |
-| `packages/spoonfeeder/src/generators/migrate-recipe/generator.spec.ts`     | Unit tests                                            |
+| `src/generators/migrate-recipe/schema.json`           | Nx schema definition                                  |
+| `src/generators/migrate-recipe/schema.d.ts`           | TypeScript types for schema                           |
+| `src/generators/migrate-recipe/generator.ts`          | Migrate-recipe generator logic                        |
+| `src/generators/migrate-recipe/migration-guidance.ts` | Migration guidance messages per recipe pair           |
+| `src/generators/migrate-recipe/generator.spec.ts`     | Unit tests                                            |
 | `tests/e2e/migrate-recipe.e2e.spec.ts`                                     | E2E test: migrate typeorm-postgres → drizzle-postgres |
 
 ### Files to Modify
 
 | File                                   | Change                        |
 | -------------------------------------- | ----------------------------- |
-| `packages/spoonfeeder/generators.json` | Add `migrate` generator entry |
+| `generators.json` | Add `migrate` generator entry |
 
 ---
 
@@ -48,12 +48,12 @@ This is **Phase 4 of 4**:
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/migrate-recipe/schema.json`
-- Create: `packages/spoonfeeder/src/generators/migrate-recipe/schema.d.ts`
+- Create: `src/generators/migrate-recipe/schema.json`
+- Create: `src/generators/migrate-recipe/schema.d.ts`
 
 - [ ] **Step 1: Create schema.json**
 
-Create `packages/spoonfeeder/src/generators/migrate-recipe/schema.json`:
+Create `src/generators/migrate-recipe/schema.json`:
 
 ```json
 {
@@ -89,7 +89,7 @@ Create `packages/spoonfeeder/src/generators/migrate-recipe/schema.json`:
 
 - [ ] **Step 2: Create schema.d.ts**
 
-Create `packages/spoonfeeder/src/generators/migrate-recipe/schema.d.ts`:
+Create `src/generators/migrate-recipe/schema.d.ts`:
 
 ```typescript
 export interface MigrateRecipeGeneratorSchema {
@@ -103,7 +103,7 @@ export interface MigrateRecipeGeneratorSchema {
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/migrate-recipe/schema.json packages/spoonfeeder/src/generators/migrate-recipe/schema.d.ts
+git add src/generators/migrate-recipe/schema.json src/generators/migrate-recipe/schema.d.ts
 git commit -m "feat(spoonfeeder): add migrate-recipe generator schema and types"
 ```
 
@@ -179,13 +179,13 @@ No separate commit — validation ships with the generator in Task 3.
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/migrate-recipe/generator.ts`
-- Create: `packages/spoonfeeder/src/generators/migrate-recipe/migration-guidance.ts`
-- Modify: `packages/spoonfeeder/generators.json`
+- Create: `src/generators/migrate-recipe/generator.ts`
+- Create: `src/generators/migrate-recipe/migration-guidance.ts`
+- Modify: `generators.json`
 
 - [ ] **Step 1: Create migration-guidance.ts**
 
-Create `packages/spoonfeeder/src/generators/migrate-recipe/migration-guidance.ts`:
+Create `src/generators/migrate-recipe/migration-guidance.ts`:
 
 ```typescript
 /**
@@ -364,7 +364,7 @@ export function getMigrationGuidance(fromId: string, toId: string, category: str
 
 - [ ] **Step 2: Create generator.ts**
 
-Create `packages/spoonfeeder/src/generators/migrate-recipe/generator.ts`:
+Create `src/generators/migrate-recipe/generator.ts`:
 
 ```typescript
 import { Tree, logger } from '@nx/devkit';
@@ -493,7 +493,7 @@ export default async function migrateRecipeGenerator(
 
 - [ ] **Step 3: Register migrate generator in generators.json**
 
-Read `packages/spoonfeeder/generators.json` and add the `migrate` entry. The file should look like:
+Read `generators.json` and add the `migrate` entry. The file should look like:
 
 ```json
 {
@@ -533,7 +533,7 @@ Expected: compiles with no errors.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/migrate-recipe/ packages/spoonfeeder/generators.json
+git add src/generators/migrate-recipe/ generators.json
 git commit -m "feat(spoonfeeder): implement migrate-recipe generator with migration guidance"
 ```
 
@@ -543,11 +543,11 @@ git commit -m "feat(spoonfeeder): implement migrate-recipe generator with migrat
 
 **Files:**
 
-- Create: `packages/spoonfeeder/src/generators/migrate-recipe/generator.spec.ts`
+- Create: `src/generators/migrate-recipe/generator.spec.ts`
 
 - [ ] **Step 1: Write unit tests**
 
-Create `packages/spoonfeeder/src/generators/migrate-recipe/generator.spec.ts`:
+Create `src/generators/migrate-recipe/generator.spec.ts`:
 
 ```typescript
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
@@ -762,7 +762,7 @@ Expected: all tests pass.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/spoonfeeder/src/generators/migrate-recipe/generator.spec.ts
+git add src/generators/migrate-recipe/generator.spec.ts
 git commit -m "test(spoonfeeder): add unit tests for migrate-recipe generator"
 ```
 
@@ -781,8 +781,8 @@ Create `tests/e2e/migrate-recipe.e2e.spec.ts`:
 ```typescript
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readJson } from '@nx/devkit';
-import addRecipeGenerator from '../../packages/spoonfeeder/src/generators/add-recipe/generator.js';
-import migrateRecipeGenerator from '../../packages/spoonfeeder/src/generators/migrate-recipe/generator.js';
+import addRecipeGenerator from '../../src/generators/add-recipe/generator.js';
+import migrateRecipeGenerator from '../../src/generators/migrate-recipe/generator.js';
 
 /**
  * E2E test: migrate typeorm-postgres → drizzle-postgres.
@@ -1104,7 +1104,7 @@ Expected: 0 TSC issues.
 - [ ] **Step 5: Verify generators.json includes all four generators**
 
 ```bash
-node -e "const g = require('./packages/spoonfeeder/generators.json'); const names = Object.keys(g.generators); console.log(names); if (!names.includes('migrate')) { process.exit(1); }"
+node -e "const g = require('./generators.json'); const names = Object.keys(g.generators); console.log(names); if (!names.includes('migrate')) { process.exit(1); }"
 ```
 
 Expected: `['add', 'remove', 'list', 'migrate']`

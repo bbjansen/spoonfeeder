@@ -12,7 +12,7 @@ Error tracking and performance monitoring for NestJS with the official Sentry SD
 
 | Package          | Version  | Purpose                           |
 | ---------------- | -------- | --------------------------------- |
-| `@sentry/nestjs` | `9.26.0` | Sentry SDK for NestJS integration |
+| `@sentry/nestjs` | `8.48.0` | Sentry SDK for NestJS integration |
 
 ## Environment Variables
 

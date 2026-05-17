@@ -52,4 +52,3 @@ Implement key RFCs and open standards in the base template and recipes:
 ## References
 
 - [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457)
-- [docs/standards/rfc-compliance.md](../../../docs/standards/rfc-compliance.md)

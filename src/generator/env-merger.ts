@@ -17,5 +17,5 @@ export function mergeEnvVars(base: EnvVar[], additions: EnvVar[][]): EnvVar[] {
 }
 
 export function renderEnvFile(vars: EnvVar[]): string {
-  return vars.map((v) => `# ${v.description}\n${v.key}=${v.defaultValue}`).join('\n\n');
+  return vars.map((v) => `# ${v.description}\n${v.key}=${v.defaultValue}`).join('\n\n') + '\n';
 }

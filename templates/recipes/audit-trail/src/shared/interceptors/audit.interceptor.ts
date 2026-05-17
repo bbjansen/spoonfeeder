@@ -15,6 +15,8 @@ export interface AuditEntry {
 
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
+  // TODO: Replace this in-memory store with a persistent backend (database, message queue).
+  // This implementation is for development only — entries are lost on restart and unbounded in memory.
   private readonly entries: AuditEntry[] = [];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {

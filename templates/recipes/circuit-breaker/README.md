@@ -18,11 +18,22 @@ Fault tolerance pattern using Opossum to prevent cascading failures in distribut
 
 ```typescript
 import { CircuitBreakerWrapper } from '@/shared/utils/circuit-breaker';
+import { ConfigService } from '@nestjs/config';
 
-const breaker = new CircuitBreakerWrapper(() => httpService.get('https://external-api.com/data'), {
-  timeout: 3000,
-  errorThresholdPercentage: 50,
-});
+// With ConfigService — reads CIRCUIT_BREAKER_TIMEOUT, CIRCUIT_BREAKER_THRESHOLD,
+// and CIRCUIT_BREAKER_RESET_TIMEOUT from the environment:
+const breaker = new CircuitBreakerWrapper(
+  () => httpService.get('https://external-api.com/data'),
+  {},
+  configService,
+);
+
+// With explicit overrides (take precedence over env vars):
+const breaker = new CircuitBreakerWrapper(
+  () => httpService.get('https://external-api.com/data'),
+  { timeout: 5000 },
+  configService,
+);
 
 const result = await breaker.fire();
 ```

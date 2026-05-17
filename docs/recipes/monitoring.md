@@ -6,8 +6,8 @@ Health checks and metrics collection for NestJS. Keep your application observabl
 
 | Recipe        | Purpose                                    | Recipe README                                                             |
 | ------------- | ------------------------------------------ | ------------------------------------------------------------------------- |
-| Health Checks | Liveness and readiness probes via Terminus | [health-checks](../../packages/templates/recipes/health-checks/README.md) |
-| Prometheus    | Metrics collection and exposition          | [prometheus](../../packages/templates/recipes/prometheus/README.md)       |
+| Health Checks | Liveness and readiness probes via Terminus | [health-checks](../../templates/recipes/health-checks/README.md) |
+| Prometheus    | Metrics collection and exposition          | [prometheus](../../templates/recipes/prometheus/README.md)       |
 
 ## Health Checks
 

@@ -27,7 +27,7 @@ Each generator modifies source files (`app.module.ts`, `main.ts`), `package.json
    - Recipe is compatible with the project type (`compatibleWith` field).
    - No mutual-exclusion conflicts with installed recipes (`conflicts` field).
    - All required recipes are already installed (`requires` field).
-4. Copy template files from `packages/templates/recipes/<templateDir>/` into the project tree, processing EJS templates with project context.
+4. Copy template files from `templates/recipes/<templateDir>/` into the project tree, processing EJS templates with project context.
 5. Add `dependencies` and `devDependencies` to `package.json` (exact versions, no ranges).
 6. Modify `src/app.module.ts`: add import statement and register the module in the `@Module.imports` array.
 7. If the recipe has a `main.ts` setup snippet (e.g., Swagger, Fastify adapter), insert it into `src/main.ts` at the marked insertion point.
@@ -129,7 +129,7 @@ Use: nx g spoonfeeder:add <recipe>
 ## 3. Technical Architecture
 
 ```
-packages/spoonfeeder/
+
   src/
     generators/
       add-recipe/
@@ -429,7 +429,7 @@ Removal finds and strips everything between the start/end markers, inclusive.
 
 ## 7. Integration with Existing System
 
-The generators reuse everything that already exists in `packages/spoonfeeder/`:
+The generators reuse everything that already exists in ``:
 
 | Existing artifact                                    | Used by generators for                                       |
 | ---------------------------------------------------- | ------------------------------------------------------------ |
@@ -438,7 +438,7 @@ The generators reuse everything that already exists in `packages/spoonfeeder/`:
 | `detectConflicts` (validation/conflict-detector.ts)  | Validating that `add-recipe` won't introduce conflicts       |
 | `RECIPE_IDS` (types.ts)                              | Type-safe recipe ID validation at compile time               |
 | `ProjectConfig` (types.ts)                           | Type definition for `.spoonfeeder.json` core fields          |
-| Template directories (`packages/templates/recipes/`) | Source files copied into the target project                  |
+| Template directories (`templates/recipes/`) | Source files copied into the target project                  |
 
 The generators do NOT duplicate recipe metadata. A single `RecipeDefinition` entry in `definitions.ts` drives both initial project generation and post-hoc recipe management.
 

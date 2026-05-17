@@ -7,7 +7,7 @@ export default new DataSource({
   port: Number(process.env.DB_PORT ?? 5432),
   database: process.env.DB_NAME ?? '<%= name %>',
   username: process.env.DB_USERNAME ?? 'postgres',
-  password: process.env.DB_PASSWORD ?? 'postgres',
+  password: process.env.DB_PASSWORD ?? (() => { throw new Error('DB_PASSWORD environment variable is required'); })(),
   entities: ['src/infrastructure/database/entities/**/*.ts'],
   migrations: ['src/infrastructure/database/migrations/*.ts'],
   synchronize: false,

@@ -6,10 +6,10 @@ Security hardening for NestJS applications. Rate limiting, HTTP headers, CORS, a
 
 | Recipe    | Purpose                               | Recipe README                                                     |
 | --------- | ------------------------------------- | ----------------------------------------------------------------- |
-| Throttler | Rate limiting per IP/user             | [throttler](../../packages/templates/recipes/throttler/README.md) |
-| Helmet    | Secure HTTP headers                   | [helmet](../../packages/templates/recipes/helmet/README.md)       |
-| CORS      | Cross-origin resource sharing         | [cors](../../packages/templates/recipes/cors/README.md)           |
-| CSRF      | Cross-site request forgery protection | [csrf](../../packages/templates/recipes/csrf/README.md)           |
+| Throttler | Rate limiting per IP/user             | [throttler](../../templates/recipes/throttler/README.md) |
+| Helmet    | Secure HTTP headers                   | [helmet](../../templates/recipes/helmet/README.md)       |
+| CORS      | Cross-origin resource sharing         | [cors](../../templates/recipes/cors/README.md)           |
+| CSRF      | Cross-site request forgery protection | [csrf](../../templates/recipes/csrf/README.md)           |
 
 ## Overview
 

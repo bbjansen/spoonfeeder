@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FastifyRequest } from 'fastify';
+import { timingSafeEqual } from 'node:crypto';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
@@ -15,10 +16,17 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedException('API key is required');
     }
 
-    if (apiKey !== validApiKey) {
+    if (!this.isEqual(apiKey, validApiKey)) {
       throw new UnauthorizedException('Invalid API key');
     }
 
     return true;
+  }
+
+  private isEqual(a: string, b: string): boolean {
+    const bufA = Buffer.from(a);
+    const bufB = Buffer.from(b);
+    if (bufA.length !== bufB.length) return false;
+    return timingSafeEqual(bufA, bufB);
   }
 }

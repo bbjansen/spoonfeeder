@@ -6,8 +6,8 @@ Centralized error tracking and log aggregation for NestJS. Capture unhandled exc
 
 | Recipe | Type                  | Best For                                                  | Recipe README                                               |
 | ------ | --------------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
-| Sentry | Error tracking SaaS   | Crash reporting, performance monitoring, release tracking | [sentry](../../packages/templates/recipes/sentry/README.md) |
-| Seq    | Structured log server | Self-hosted log aggregation, structured event search      | [seq2](../../packages/templates/recipes/seq2/README.md)     |
+| Sentry | Error tracking SaaS   | Crash reporting, performance monitoring, release tracking | [sentry](../../templates/recipes/sentry/README.md) |
+| Seq    | Structured log server | Self-hosted log aggregation, structured event search      | [seq2](../../templates/recipes/seq2/README.md)     |
 
 ## Comparison
 

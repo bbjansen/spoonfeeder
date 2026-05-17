@@ -255,19 +255,19 @@ describe('migrate-recipe E2E: typeorm-postgres -> drizzle-postgres', () => {
     ).rejects.toThrow('Cannot migrate between different categories');
   });
 
-  it('should work with dry-run flag without error', async () => {
-    // Note: dry-run in Nx devkit still applies changes to the virtual tree.
-    // The actual dry-run behavior (no disk write) is handled by the Nx runner,
-    // not by the generator itself. This test verifies the flag is accepted.
+  it('should complete migration without error', async () => {
+    // Note: dry-run in Nx devkit is handled by the Nx CLI runner,
+    // not by the generator itself. This test verifies migration completes.
     await migrateRecipeGenerator(tree, {
       from: 'typeorm-postgres',
       to: 'drizzle-postgres',
-      dryRun: true,
     });
 
-    // The generator runs against the virtual tree regardless of dryRun flag.
-    // The Nx CLI intercepts dryRun and prevents disk writes.
-    // We just verify it completes without error.
-    expect(true).toBe(true);
+    const manifest = typedReadJson<{ recipes: Record<string, unknown> }>(
+      tree,
+      '.spoonfeeder.json',
+    );
+    expect(manifest.recipes['typeorm-postgres']).toBeUndefined();
+    expect(manifest.recipes['drizzle-postgres']).toBeDefined();
   });
 });

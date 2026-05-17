@@ -2,8 +2,12 @@ import ejs from 'ejs';
 import path from 'node:path';
 import fs from 'fs-extra';
 
-export function renderTemplate(template: string, data: Record<string, unknown>): string {
-  return ejs.render(template, data);
+export function renderTemplate(
+  template: string,
+  data: Record<string, unknown>,
+  filename?: string,
+): string {
+  return ejs.render(template, data, { filename });
 }
 
 export async function renderTemplateFile(
@@ -11,7 +15,7 @@ export async function renderTemplateFile(
   data: Record<string, unknown>,
 ): Promise<string> {
   const template = await fs.readFile(templatePath, 'utf-8');
-  return renderTemplate(template, data);
+  return renderTemplate(template, data, templatePath);
 }
 
 export async function renderAndWrite(

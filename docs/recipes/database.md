@@ -6,10 +6,10 @@ Database integration options for NestJS applications. Choose based on your data 
 
 | Recipe               | ORM Style                      | Best For                                     | Recipe README                                                                   |
 | -------------------- | ------------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------- |
-| TypeORM + PostgreSQL | Active Record / Data Mapper    | Relational data, complex queries, migrations | [typeorm-postgres](../../packages/templates/recipes/typeorm-postgres/README.md) |
-| TypeORM + MySQL      | Active Record / Data Mapper    | MySQL/MariaDB environments                   | [typeorm-mysql](../../packages/templates/recipes/typeorm-mysql/README.md)       |
-| Prisma               | Schema-first, generated client | Type safety, rapid prototyping, modern DX    | [prisma](../../packages/templates/recipes/prisma/README.md)                     |
-| Mongoose             | Schema-based ODM               | Document databases, flexible schemas         | [mongoose](../../packages/templates/recipes/mongoose/README.md)                 |
+| TypeORM + PostgreSQL | Active Record / Data Mapper    | Relational data, complex queries, migrations | [typeorm-postgres](../../templates/recipes/typeorm-postgres/README.md) |
+| TypeORM + MySQL      | Active Record / Data Mapper    | MySQL/MariaDB environments                   | [typeorm-mysql](../../templates/recipes/typeorm-mysql/README.md)       |
+| Prisma               | Schema-first, generated client | Type safety, rapid prototyping, modern DX    | [prisma](../../templates/recipes/prisma/README.md)                     |
+| Mongoose             | Schema-based ODM               | Document databases, flexible schemas         | [mongoose](../../templates/recipes/mongoose/README.md)                 |
 
 ## Comparison
 
@@ -90,5 +90,5 @@ export class UsersModule {}
 
 ## Related Recipes
 
-- [Database Seeding](../../packages/templates/recipes/database-seeding/README.md) -- populate development/test data
-- [Database Factories](../../packages/templates/recipes/database-factories/README.md) -- generate realistic test entities
+- [Database Seeding](../../templates/recipes/database-seeding/README.md) -- populate development/test data
+- [Database Factories](../../templates/recipes/database-factories/README.md) -- generate realistic test entities

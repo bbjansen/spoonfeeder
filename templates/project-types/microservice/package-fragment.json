@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@nestjs/microservices": "11.1.18"
+    "@nestjs/microservices": "11.1.19"
   }
 }

@@ -6,7 +6,7 @@ Continuous integration and deployment pipelines for NestJS applications.
 
 | Recipe | Description                                                           | Recipe README                                             |
 | ------ | --------------------------------------------------------------------- | --------------------------------------------------------- |
-| CI/CD  | Pipeline templates for GitHub Actions, Azure DevOps, AWS CodePipeline | [ci-cd](../../packages/templates/recipes/ci-cd/README.md) |
+| CI/CD  | Pipeline templates for GitHub Actions, Azure DevOps, AWS CodePipeline | [ci-cd](../../templates/recipes/ci-cd/README.md) |
 
 ## Comparison
 
@@ -138,4 +138,4 @@ artifacts:
 ## Related Recipes
 
 - [Deployment](deployment.md) -- deployment targets for the CD stage
-- [Dependabot/Renovate](../../packages/templates/recipes/dependabot-renovate/README.md) -- automated dependency updates
+- [Dependabot/Renovate](../../templates/recipes/dependabot-renovate/README.md) -- automated dependency updates

@@ -6,8 +6,8 @@ Server-to-client and bidirectional real-time communication patterns for NestJS.
 
 | Recipe     | Protocol / API                     | Best For                                                | Recipe README                                                       |
 | ---------- | ---------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------- |
-| SSE        | HTTP `text/event-stream`           | Live feeds, notifications, progress updates             | [sse](../../packages/templates/recipes/sse/README.md)               |
-| WebSockets | Socket.io via `@nestjs/websockets` | Chat, collaboration, gaming, low-latency bi-directional | [websockets](../../packages/templates/recipes/websockets/README.md) |
+| SSE        | HTTP `text/event-stream`           | Live feeds, notifications, progress updates             | [sse](../../templates/recipes/sse/README.md)               |
+| WebSockets | Socket.io via `@nestjs/websockets` | Chat, collaboration, gaming, low-latency bi-directional | [websockets](../../templates/recipes/websockets/README.md) |
 
 ## When to Use Each
 

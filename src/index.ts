@@ -36,7 +36,8 @@ async function main(): Promise<void> {
   await generate(config, registry, templatesDir);
   await runPostGenerate(config.outputDir);
 
-  const nextSteps = `cd ${config.name}\npnpm start:dev`;
+  const relPath = path.relative(process.cwd(), config.outputDir);
+  const nextSteps = `cd ${relPath}\npnpm start:dev`;
   p.note(nextSteps, 'Next steps');
 
   p.outro('Project created successfully!');

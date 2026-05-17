@@ -6,8 +6,8 @@ Structured logging for NestJS. Replace the default console logger with a product
 
 | Recipe  | Library      | Best For                             | Recipe README                                                 |
 | ------- | ------------ | ------------------------------------ | ------------------------------------------------------------- |
-| Pino    | nestjs-pino  | Performance-critical apps, JSON logs | [pino](../../packages/templates/recipes/pino/README.md)       |
-| Winston | nest-winston | Flexible transports, custom formats  | [winston](../../packages/templates/recipes/winston/README.md) |
+| Pino    | nestjs-pino  | Performance-critical apps, JSON logs | [pino](../../templates/recipes/pino/README.md)       |
+| Winston | nest-winston | Flexible transports, custom formats  | [winston](../../templates/recipes/winston/README.md) |
 
 ## Comparison
 

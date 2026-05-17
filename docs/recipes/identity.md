@@ -6,12 +6,12 @@ Social login, authentication flows, multi-factor authentication, and role-based 
 
 | Recipe       | Mechanism                        | Best For                                      | Recipe README                                                           |
 | ------------ | -------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------- |
-| OAuth Google | Passport + Google OAuth 2.0      | Consumer apps, Google Workspace SSO           | [oauth-google](../../packages/templates/recipes/oauth-google/README.md) |
-| OAuth GitHub | Passport + GitHub OAuth          | Developer-facing apps, open-source dashboards | [oauth-github](../../packages/templates/recipes/oauth-github/README.md) |
-| OAuth Apple  | Passport + Sign in with Apple    | iOS/macOS apps, App Store compliance          | [oauth-apple](../../packages/templates/recipes/oauth-apple/README.md)   |
-| Auth Flows   | Signup, verify email, reset pwd  | Any app requiring email-based registration    | [auth-flows](../../packages/templates/recipes/auth-flows/README.md)     |
-| MFA / TOTP   | TOTP-based 2FA with backup codes | Security-sensitive apps, compliance           | [mfa-totp](../../packages/templates/recipes/mfa-totp/README.md)         |
-| RBAC (CASL)  | CASL ability factory             | Fine-grained, attribute-based authorization   | [rbac-casl](../../packages/templates/recipes/rbac-casl/README.md)       |
+| OAuth Google | Passport + Google OAuth 2.0      | Consumer apps, Google Workspace SSO           | [oauth-google](../../templates/recipes/oauth-google/README.md) |
+| OAuth GitHub | Passport + GitHub OAuth          | Developer-facing apps, open-source dashboards | [oauth-github](../../templates/recipes/oauth-github/README.md) |
+| OAuth Apple  | Passport + Sign in with Apple    | iOS/macOS apps, App Store compliance          | [oauth-apple](../../templates/recipes/oauth-apple/README.md)   |
+| Auth Flows   | Signup, verify email, reset pwd  | Any app requiring email-based registration    | [auth-flows](../../templates/recipes/auth-flows/README.md)     |
+| MFA / TOTP   | TOTP-based 2FA with backup codes | Security-sensitive apps, compliance           | [mfa-totp](../../templates/recipes/mfa-totp/README.md)         |
+| RBAC (CASL)  | CASL ability factory             | Fine-grained, attribute-based authorization   | [rbac-casl](../../templates/recipes/rbac-casl/README.md)       |
 
 ## When to Use Each
 

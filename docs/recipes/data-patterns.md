@@ -6,9 +6,9 @@ Patterns for handling data lifecycle, compliance, and reliable event delivery al
 
 | Recipe               | Pattern                                 | Best For                                             | Recipe README                                                                           |
 | -------------------- | --------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Soft Delete          | Logical deletion via `deletedAt` column | Undo support, audit requirements, referential safety | [soft-delete](../../packages/templates/recipes/soft-delete/README.md)                   |
-| Audit Trail          | Change log with user, action, and diff  | Compliance (SOX, GDPR), debugging, history tracking  | [audit-trail](../../packages/templates/recipes/audit-trail/README.md)                   |
-| Transactional Outbox | Outbox table written in the same DB txn | Guaranteed event delivery without 2PC                | [transactional-outbox](../../packages/templates/recipes/transactional-outbox/README.md) |
+| Soft Delete          | Logical deletion via `deletedAt` column | Undo support, audit requirements, referential safety | [soft-delete](../../templates/recipes/soft-delete/README.md)                   |
+| Audit Trail          | Change log with user, action, and diff  | Compliance (SOX, GDPR), debugging, history tracking  | [audit-trail](../../templates/recipes/audit-trail/README.md)                   |
+| Transactional Outbox | Outbox table written in the same DB txn | Guaranteed event delivery without 2PC                | [transactional-outbox](../../templates/recipes/transactional-outbox/README.md) |
 
 ## When to Use Each
 
