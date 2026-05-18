@@ -107,6 +107,32 @@ const projectConfigSchema = z
         path: ['recipes'],
       });
     }
+
+    // Cross-cloud recipe validation
+    if (data.cloudProvider !== 'none') {
+      const cloudPrefixes = ['aws-', 'gcp-', 'azure-'] as const;
+      const prefixToProvider: Record<string, string> = {
+        'aws-': 'aws',
+        'gcp-': 'gcp',
+        'azure-': 'azure',
+      };
+
+      for (const recipeId of data.recipes) {
+        for (const prefix of cloudPrefixes) {
+          if (recipeId.startsWith(prefix)) {
+            const recipeCloud = prefixToProvider[prefix];
+            if (recipeCloud !== data.cloudProvider) {
+              ctx.addIssue({
+                code: 'custom',
+                message: `Recipe '${recipeId}' is for ${recipeCloud} but cloudProvider is '${data.cloudProvider}'`,
+                path: ['recipes'],
+              });
+            }
+            break;
+          }
+        }
+      }
+    }
   });
 
 export interface ConfigValidationError {

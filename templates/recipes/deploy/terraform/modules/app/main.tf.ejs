@@ -1,0 +1,211 @@
+<% if (cloudProvider === 'gcp') { -%>
+resource "google_cloud_run_v2_service" "app" {
+  name     = "${var.app_name}-${var.environment}"
+  location = var.region
+
+  template {
+    containers {
+      image = var.container_image
+
+      ports {
+        container_port = 3000
+      }
+
+      env {
+        name  = "NODE_ENV"
+        value = var.environment
+      }
+
+      env {
+        name  = "PORT"
+        value = "3000"
+      }
+
+      resources {
+        limits = {
+          cpu    = "${var.cpu}m"
+          memory = "${var.memory}Mi"
+        }
+      }
+
+      startup_probe {
+        http_get {
+          path = "/health"
+          port = 3000
+        }
+        initial_delay_seconds = 10
+        period_seconds        = 10
+        failure_threshold     = 3
+      }
+
+      liveness_probe {
+        http_get {
+          path = "/health"
+          port = 3000
+        }
+        period_seconds = 30
+      }
+    }
+
+    scaling {
+      min_instance_count = 0
+      max_instance_count = var.desired_count
+    }
+  }
+}
+
+resource "google_cloud_run_v2_service_iam_member" "public" {
+  project  = google_cloud_run_v2_service.app.project
+  location = google_cloud_run_v2_service.app.location
+  name     = google_cloud_run_v2_service.app.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+<% } else if (cloudProvider === 'azure') { -%>
+resource "azurerm_log_analytics_workspace" "main" {
+  name                = "${var.app_name}-${var.environment}-logs"
+  location            = var.region
+  resource_group_name = var.resource_group_name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+resource "azurerm_container_app_environment" "main" {
+  name                       = "${var.app_name}-${var.environment}-env"
+  location                   = var.region
+  resource_group_name        = var.resource_group_name
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
+}
+
+resource "azurerm_container_app" "app" {
+  name                         = "${var.app_name}-${var.environment}"
+  container_app_environment_id = azurerm_container_app_environment.main.id
+  resource_group_name          = var.resource_group_name
+  revision_mode                = "Single"
+
+  template {
+    min_replicas = 0
+    max_replicas = var.desired_count
+
+    container {
+      name   = var.app_name
+      image  = var.container_image
+      cpu    = var.cpu / 1000.0
+      memory = "${var.memory / 1024.0}Gi"
+
+      env {
+        name  = "NODE_ENV"
+        value = var.environment
+      }
+
+      env {
+        name  = "PORT"
+        value = "3000"
+      }
+
+      liveness_probe {
+        transport = "HTTP"
+        path      = "/health"
+        port      = 3000
+      }
+
+      readiness_probe {
+        transport = "HTTP"
+        path      = "/health"
+        port      = 3000
+      }
+    }
+  }
+
+  ingress {
+    target_port      = 3000
+    external_enabled = true
+
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
+  }
+}
+<% } else { -%>
+resource "aws_ecs_cluster" "main" {
+  name = "${var.app_name}-${var.environment}"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+}
+
+resource "aws_ecs_task_definition" "app" {
+  family                   = "${var.app_name}-${var.environment}"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = var.cpu
+  memory                   = var.memory
+  execution_role_arn       = aws_iam_role.ecs_execution.arn
+  task_role_arn            = aws_iam_role.ecs_task.arn
+
+  container_definitions = jsonencode([
+    {
+      name      = var.app_name
+      image     = var.container_image
+      essential = true
+
+      portMappings = [
+        {
+          containerPort = 3000
+          protocol      = "tcp"
+        }
+      ]
+
+      environment = [
+        { name = "NODE_ENV", value = var.environment },
+        { name = "PORT", value = "3000" }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.app.name
+          "awslogs-region"        = var.region
+          "awslogs-stream-prefix" = var.app_name
+        }
+      }
+
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      }
+    }
+  ])
+}
+
+resource "aws_ecs_service" "app" {
+  name            = "${var.app_name}-${var.environment}"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.app.arn
+  desired_count   = var.desired_count
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = var.private_subnet_ids
+    security_groups  = [aws_security_group.app.id]
+    assign_public_ip = false
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app.arn
+    container_name   = var.app_name
+    container_port   = 3000
+  }
+}
+
+resource "aws_cloudwatch_log_group" "app" {
+  name              = "/ecs/${var.app_name}-${var.environment}"
+  retention_in_days = 30
+}
+<% } -%>

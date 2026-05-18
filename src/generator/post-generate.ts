@@ -6,7 +6,7 @@ export async function runPostGenerate(outputDir: string): Promise<void> {
 
   try {
     s.start('Installing dependencies...');
-    await execa('pnpm', ['install'], { cwd: outputDir });
+    await execa('pnpm', ['install', '--ignore-scripts'], { cwd: outputDir });
     s.stop('Dependencies installed.');
   } catch (error) {
     s.stop('Dependency installation failed.');
@@ -19,7 +19,7 @@ export async function runPostGenerate(outputDir: string): Promise<void> {
     s.start('Initializing git repository...');
     await execa('git', ['init'], { cwd: outputDir });
     await execa('git', ['add', '.'], { cwd: outputDir });
-    await execa('git', ['commit', '-m', 'chore: initial commit'], {
+    await execa('git', ['-c', 'commit.gpgsign=false', 'commit', '-m', 'chore: initial commit'], {
       cwd: outputDir,
     });
     s.stop('Git repository initialized.');

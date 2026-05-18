@@ -88,11 +88,15 @@ export default async function migrateRecipeGenerator(
 
   if (dependents.length > 0) {
     // Check if the 'to' recipe satisfies the dependency (i.e. dependents require 'from' but 'to' could replace it)
-    const toRecipeId = options.to as RecipeId;
+    const postMigrationIds = installedRecipeIds
+      .filter(id => id !== options.from)
+      .concat(options.to);
+    const postMigrationSet = new Set(postMigrationIds);
+
     const unsatisfiedDependents = dependents.filter((dep) => {
       const depRecipe = registry.get(dep.recipeId);
-      // The dependent is unsatisfied if it requires the 'from' recipe and the 'to' recipe does not satisfy it
-      return !depRecipe?.requires.includes(toRecipeId);
+      if (!depRecipe) return true;
+      return depRecipe.requires.some(reqId => !postMigrationSet.has(reqId));
     });
 
     if (unsatisfiedDependents.length > 0) {

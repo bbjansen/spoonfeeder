@@ -1,13 +1,39 @@
 terraform {
   required_version = ">= 1.5"
 
+<% if (cloudProvider === 'gcp') { -%>
+  backend "gcs" {}
+<% } else if (cloudProvider === 'azure') { -%>
+  backend "azurerm" {}
+<% } else { -%>
   backend "s3" {}
+<% } -%>
 }
+
+<% if (cloudProvider === 'gcp') { -%>
+provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+<% } else if (cloudProvider === 'azure') { -%>
+provider "azurerm" {
+  features {}
+}
+<% } else { -%>
+provider "aws" {
+  region = var.region
+}
+<% } -%>
 
 module "app" {
   source = "./modules/app"
 
-  app_name    = "<%= name %>"
-  environment = var.environment
-  region      = var.region
+  app_name        = "<%= name %>"
+  environment     = var.environment
+  region          = var.region
+<% if (cloudProvider === 'gcp') { -%>
+  project_id      = var.project_id
+<% } else if (cloudProvider === 'azure') { -%>
+  resource_group_name = var.resource_group_name
+<% } -%>
 }

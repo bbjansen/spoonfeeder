@@ -23,18 +23,26 @@ export default function listRecipesGenerator(
     ? registry.getByCategory(options.category)
     : registry.getAll();
 
+  const projectType = manifest?.projectType;
+  const compatibleRecipes = projectType
+    ? allRecipes.filter(r => r.compatibleWith === 'all' || r.compatibleWith.includes(projectType as typeof r.compatibleWith extends 'all' ? never : typeof r.compatibleWith[number]))
+    : allRecipes;
+
   if (options.json) {
     const output = {
       projectType: manifest?.projectType ?? 'unknown',
       cloudProvider: manifest?.cloudProvider ?? 'unknown',
       installed: installedIds,
-      available: allRecipes
+      available: compatibleRecipes
         .filter((r) => !installedIds.includes(r.id))
         .map((r) => ({
           id: r.id,
           name: r.name,
+          description: r.description,
           category: r.category,
           conflicts: r.conflicts,
+          requires: r.requires,
+          compatibleWith: r.compatibleWith,
         })),
     };
     logger.info(JSON.stringify(output, null, 2));
@@ -55,7 +63,7 @@ export default function listRecipesGenerator(
     logger.info('');
   }
 
-  const available = allRecipes.filter((r) => !installedIds.includes(r.id));
+  const available = compatibleRecipes.filter((r) => !installedIds.includes(r.id));
   logger.info(`Available (${available.length}):`);
   for (const recipe of available.slice(0, 20)) {
     const conflictNote = recipe.conflicts.some((c) => installedIds.includes(c))

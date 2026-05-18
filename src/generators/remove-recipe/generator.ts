@@ -266,7 +266,7 @@ export default async function removeRecipeGenerator(
         // Promote shared vars that referenced this section back to active lines
         const removedSectionName = recipeEntry.envSection;
         const sharedVarRegex = new RegExp(
-          `^# (\\S+=\\S+) \\(shared with ${escapeRegexString(removedSectionName)}\\)$`,
+          `^# (\\S+=.*?) \\(shared with ${escapeRegexString(removedSectionName)}\\)$`,
           'gm',
         );
         content = content.replace(sharedVarRegex, '$1');

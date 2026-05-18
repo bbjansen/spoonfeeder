@@ -8,7 +8,13 @@ variable "environment" {
 
 variable "region" {
   type    = string
+<% if (cloudProvider === 'gcp') { -%>
+  default = "europe-west1"
+<% } else if (cloudProvider === 'azure') { -%>
+  default = "westeurope"
+<% } else { -%>
   default = "eu-west-1"
+<% } -%>
 }
 
 variable "container_image" {
@@ -31,6 +37,17 @@ variable "desired_count" {
   default = 2
 }
 
+<% if (cloudProvider === 'gcp') { -%>
+variable "project_id" {
+  description = "GCP project ID"
+  type        = string
+}
+<% } else if (cloudProvider === 'azure') { -%>
+variable "resource_group_name" {
+  description = "Azure resource group name"
+  type        = string
+}
+<% } else { -%>
 variable "private_subnet_ids" {
   type    = list(string)
   default = []
@@ -40,3 +57,4 @@ variable "vpc_id" {
   type    = string
   default = ""
 }
+<% } -%>
