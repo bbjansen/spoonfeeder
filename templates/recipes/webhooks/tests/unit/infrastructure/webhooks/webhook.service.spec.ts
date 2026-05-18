@@ -7,6 +7,7 @@ describe('WebhookService', () => {
   beforeEach(() => {
     const configService = {
       get: jest.fn().mockReturnValue('test-secret'),
+      getOrThrow: jest.fn().mockReturnValue('test-secret'),
     } as unknown as ConfigService;
     service = new WebhookService(configService);
   });

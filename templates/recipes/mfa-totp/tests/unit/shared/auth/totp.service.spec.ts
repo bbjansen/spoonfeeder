@@ -43,7 +43,7 @@ describe('TotpService', () => {
     it('should return a boolean result', () => {
       const secret = service.generateSecret();
       const result = service.verify('123456', secret);
-      expect(result).toBe(true || false); // boolean guard
+      expect(typeof result).toBe('boolean');
       expect([true, false]).toContain(result);
     });
   });

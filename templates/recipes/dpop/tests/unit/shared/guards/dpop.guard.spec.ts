@@ -1,3 +1,9 @@
+jest.mock('jose', () => ({
+  jwtVerify: jest.fn(),
+  importJWK: jest.fn(),
+  calculateJwkThumbprint: jest.fn(),
+}));
+
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';

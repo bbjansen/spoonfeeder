@@ -37,7 +37,7 @@ describe('PreferInterceptor', () => {
     interceptor.intercept(context, next).subscribe((result) => {
       expect(result).toBeUndefined();
       expect(codeFn).toHaveBeenCalledWith(204);
-      expect(headerFn).toHaveBeenCalledWith('Preference-Applied', 'return=minimal');
+      expect(headerFn).not.toHaveBeenCalled();
       done();
     });
   });

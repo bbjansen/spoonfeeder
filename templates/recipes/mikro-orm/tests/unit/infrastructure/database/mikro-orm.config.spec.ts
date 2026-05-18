@@ -1,9 +1,13 @@
 describe('MikroORM config', () => {
   const originalEnv = process.env;
 
+  beforeAll(() => {
+    process.env.DB_PASSWORD = 'test';
+  });
+
   beforeEach(() => {
     jest.resetModules();
-    process.env = { ...originalEnv };
+    process.env = { ...originalEnv, DB_PASSWORD: 'test' };
   });
 
   afterAll(() => {
@@ -15,7 +19,6 @@ describe('MikroORM config', () => {
     delete process.env.DB_PORT;
     delete process.env.DB_NAME;
     delete process.env.DB_USERNAME;
-    delete process.env.DB_PASSWORD;
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const config = require('../../../../src/infrastructure/database/mikro-orm.config').default;
@@ -24,7 +27,16 @@ describe('MikroORM config', () => {
     expect(config.port).toBe(5432);
     expect(config.dbName).toBe('app');
     expect(config.user).toBe('postgres');
-    expect(config.password).toBe('postgres');
+    expect(config.password).toBe('test');
+  });
+
+  it('should throw when DB_PASSWORD is not set', () => {
+    delete process.env.DB_PASSWORD;
+
+    expect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('../../../../src/infrastructure/database/mikro-orm.config');
+    }).toThrow('DB_PASSWORD environment variable is required');
   });
 
   it('should pick up custom environment variables', () => {

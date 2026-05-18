@@ -1,3 +1,13 @@
+jest.mock('@adminjs/nestjs', () => ({
+  AdminModule: {
+    createAdminAsync: jest.fn().mockReturnValue({ module: class {}, providers: [] }),
+  },
+}), { virtual: true });
+
+jest.mock('adminjs', () => {
+  return { default: class AdminJS {} };
+}, { virtual: true });
+
 import { AdminModule } from '@/app/modules/admin/admin.module';
 
 describe('AdminModule', () => {
