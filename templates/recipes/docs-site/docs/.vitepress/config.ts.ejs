@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
-  title: '<%= projectName %>',
-  description: '<%= projectDescription %>',
-  base: '/<%= repoName %>/',
+  title: '<%= name %>',
+  description: '<%= name %> documentation',
+  base: '/<%= name %>/',
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
@@ -40,13 +40,13 @@ export default defineConfig({
       ],
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/<%= githubOrg %>/<%= repoName %>' },
+      { icon: 'github', link: 'https://github.com/<%= packageScope ? packageScope + '/' : '' %><%= name %>' },
     ],
     search: {
       provider: 'local',
     },
     editLink: {
-      pattern: 'https://github.com/<%= githubOrg %>/<%= repoName %>/edit/main/docs/:path',
+      pattern: 'https://github.com/<%= packageScope ? packageScope + '/' : '' %><%= name %>/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
   },

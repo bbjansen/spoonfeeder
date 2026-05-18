@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { FastifyRequest } from 'fastify';
+import '@fastify/multipart';
 
 @Injectable()
 export class FileUploadInterceptor implements NestInterceptor {

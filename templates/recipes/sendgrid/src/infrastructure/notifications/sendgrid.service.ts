@@ -28,7 +28,7 @@ export class SendGridService implements OnModuleInit {
   }
 
   async send(options: SendEmailOptions): Promise<void> {
-    const message: sgMail.MailDataRequired = {
+    const message = {
       to: options.to,
       from: { email: this.fromEmail, name: this.fromName },
       subject: options.subject,
@@ -38,7 +38,7 @@ export class SendGridService implements OnModuleInit {
       ...(options.dynamicTemplateData && {
         dynamicTemplateData: options.dynamicTemplateData,
       }),
-    };
+    } as sgMail.MailDataRequired;
 
     try {
       await sgMail.send(message);

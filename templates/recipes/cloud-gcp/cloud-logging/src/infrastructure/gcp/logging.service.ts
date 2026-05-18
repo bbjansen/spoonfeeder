@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Logging, Log, Entry } from '@google-cloud/logging';
 
@@ -9,7 +9,7 @@ interface LogEntry {
 }
 
 @Injectable()
-export class CloudLoggingService implements OnModuleDestroy {
+export class CloudLoggingService {
   private readonly logger = new Logger(CloudLoggingService.name);
   private readonly logging: Logging;
   private readonly defaultLogName: string;
@@ -42,9 +42,5 @@ export class CloudLoggingService implements OnModuleDestroy {
     });
 
     await log.write(logEntries);
-  }
-
-  async onModuleDestroy(): Promise<void> {
-    await this.logging.close();
   }
 }

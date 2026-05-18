@@ -6,7 +6,7 @@ import {
   Configuration,
 } from '@azure/msal-node';
 import * as jwt from 'jsonwebtoken';
-import * as jwksClient from 'jwks-rsa';
+import { JwksClient } from 'jwks-rsa';
 
 @Injectable()
 export class EntraIdService {
@@ -35,7 +35,7 @@ export class EntraIdService {
   }
 
   async validateToken(token: string): Promise<jwt.JwtPayload> {
-    const jwks = jwksClient({
+    const jwks = new JwksClient({
       jwksUri: `https://login.microsoftonline.com/${this.tenantId}/discovery/v2.0/keys`,
     });
 
