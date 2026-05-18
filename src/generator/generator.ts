@@ -318,10 +318,10 @@ export async function generate(
     const transportDeps: Record<string, Record<string, string>> = {
       redis: { ioredis: '5.6.1' },
       nats: { nats: '2.29.1' },
-      mqtt: { mqtt: '5.10.7' },
+      mqtt: { mqtt: '5.15.1' },
       rabbitmq: { amqplib: '0.10.5', '@types/amqplib': '0.10.6' },
       kafka: { kafkajs: '2.2.4' },
-      grpc: { '@grpc/grpc-js': '1.13.5', '@grpc/proto-loader': '0.7.15' },
+      grpc: { '@grpc/grpc-js': '1.14.3', '@grpc/proto-loader': '0.8.1' },
     };
     const transportFragment = config.transportLayer && transportDeps[config.transportLayer]
       ? { dependencies: transportDeps[config.transportLayer] }
