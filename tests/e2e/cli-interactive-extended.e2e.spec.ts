@@ -326,9 +326,9 @@ describe('CLI interactive E2E (extended)', () => {
       expect(dirExists(path.join(outputDir, 'src', 'shared'))).toBe(true);
     });
 
-    it('should generate src/infrastructure/ directory', async () => {
+    it('should generate src/infrastructure/ directory when recipes use it', async () => {
       const outputDir = path.join(tmpDir, 'file-infra');
-      await generate(makeConfig({ name: 'my-api', outputDir }), registry, TEMPLATES_DIR);
+      await generate(makeConfig({ name: 'my-api', outputDir, recipes: ['pino'] as any }), registry, TEMPLATES_DIR);
       expect(dirExists(path.join(outputDir, 'src', 'infrastructure'))).toBe(true);
     });
 
