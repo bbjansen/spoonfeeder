@@ -312,6 +312,7 @@ export const recipeDefinitions: RecipeDefinition[] = [
     category: 'Queue',
     dependencies: {
       '@nestjs/microservices': '11.1.19',
+      'amqp-connection-manager': '5.0.0',
       amqplib: '0.10.5',
     },
     devDependencies: {
