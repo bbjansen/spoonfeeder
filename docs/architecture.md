@@ -78,6 +78,38 @@ src/
             └── mappers/           # Data transformation (when needed)
 ```
 
+### Module Registration
+
+Recipe modules are automatically imported into `app.module.ts` during generation. For example, selecting the `typeorm-postgres` and `pino` recipes produces:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from '@/infrastructure/database/database.module';
+import { LoggerModule } from '@/infrastructure/logging/logger.module';
+
+@Module({
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, LoggerModule],
+})
+export class AppModule {}
+```
+
+The `add-recipe` and `remove-recipe` Nx generators also manage these imports automatically.
+
+### Workspace Layout (Monorepo / Full-Stack)
+
+For `monorepo` and `full-stack` project types, the NestJS API lives under `apps/api/`:
+
+```
+apps/
+├── api/
+│   ├── src/          # NestJS source (same structure as above)
+│   └── tests/        # Tests
+├── web/              # Frontend (full-stack only: Next.js, Vite, Nuxt, SvelteKit)
+```
+
+The `@/*` import alias maps to `apps/api/src/*` in workspace projects and `src/*` in standard projects.
+
 ### Structure Rules
 
 | Pattern                             | When to Use                              |

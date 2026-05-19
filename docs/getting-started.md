@@ -25,9 +25,18 @@ cp .env.example .env
 
 ## Environment Variables
 
-| Variable | Default | Description                     |
-| -------- | ------- | ------------------------------- |
-| `PORT`   | `3000`  | HTTP port the server listens on |
+Base variables depend on your project type:
+
+**HTTP project types** (http-api, aws-lambda, full-stack, monorepo):
+
+| Variable   | Default | Description                     |
+| ---------- | ------- | ------------------------------- |
+| `PORT`     | `3000`  | HTTP port the server listens on |
+| `NODE_ENV` | `development` | Environment |
+
+**Microservice project types** get transport-specific variables instead of `PORT` (e.g., `RABBITMQ_URL`, `KAFKA_BROKERS`, `REDIS_HOST`).
+
+Selected recipes add their own environment variables to `.env.example` with section markers for easy management.
 
 ## Development
 

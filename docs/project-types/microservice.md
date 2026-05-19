@@ -19,27 +19,46 @@ Choose `microservice` when you need a service that communicates with other servi
 
 ### Transport Configuration
 
+The generator automatically configures `main.ts` based on your selected transport layer. Each transport gets the correct `Transport.*` enum, connection options, and environment variable references.
+
+For example, selecting **RabbitMQ** generates:
+
 ```typescript
-// main.ts
+// main.ts (generated)
 import { NestFactory } from '@nestjs/core';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
-import { AppModule } from '@/app.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
     transport: Transport.RMQ,
     options: {
-      urls: [process.env.RABBITMQ_URL],
-      queue: 'orders_queue',
+      urls: [process.env.RABBITMQ_URL ?? 'amqp://guest:guest@localhost:5672'],
+      queue: process.env.RABBITMQ_QUEUE ?? 'my-service-queue',
       queueOptions: { durable: true },
     },
   });
 
+  app.enableShutdownHooks();
   await app.listen();
 }
 
-bootstrap();
+void bootstrap();
 ```
+
+Transport-specific dependencies are automatically added to `package.json`, and matching environment variables are added to `.env.example`.
+
+### Environment Variables by Transport
+
+| Transport | Variables |
+| --------- | --------- |
+| TCP       | `TCP_HOST`, `TCP_PORT` |
+| Redis     | `REDIS_HOST`, `REDIS_PORT` |
+| NATS      | `NATS_URL` |
+| MQTT      | `MQTT_URL` |
+| RabbitMQ  | `RABBITMQ_URL`, `RABBITMQ_QUEUE` |
+| Kafka     | `KAFKA_BROKERS` |
+| gRPC      | `GRPC_URL` |
 
 ## Message Patterns
 

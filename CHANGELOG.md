@@ -4,6 +4,105 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] — 2026-05-19
+
+### Added
+
+#### Express Adapter Support
+- Full Express adapter support across all HTTP project types (http-api, aws-lambda, full-stack, monorepo)
+- Every recipe template is now adapter-aware with EJS conditionals for Express vs Fastify code paths
+- Config validator rejects graphql-mercurius with Express adapter (Fastify-only)
+
+#### Transport Layer Generation
+- Microservice projects now generate transport-specific main.ts configuration for all 8 transports (TCP, Redis, NATS, MQTT, RabbitMQ, Kafka, gRPC, custom)
+- Transport-specific npm dependencies automatically added (ioredis, kafkajs, nats, mqtt, amqplib, @grpc/grpc-js)
+- Transport-specific environment variables in .env.example
+
+#### Module Registration
+- All 54 recipes with NestJS modules are now automatically imported into app.module.ts
+- Created module wrappers for 8 service-only recipes (prisma, sendgrid, dead-letter-queue, feature-flags, graceful-shutdown, mfa-totp, transactional-outbox, webhooks)
+- add-recipe generator now also applies moduleImport during post-generation recipe additions
+
+#### Multi-Cloud Terraform
+- Terraform deploy templates now generate cloud-appropriate resources (AWS ECS, GCP Cloud Run, Azure Container Apps)
+- Backend configuration adapts to cloud provider (S3, GCS, azurerm)
+- Provider blocks and variables are cloud-aware
+
+#### Config Validation
+- Recipe conflict validation (rejects conflicting ORM/logger/email combos)
+- Recipe requires validation (rejects missing dependency chains)
+- Recipe compatibleWith validation (rejects HTTP-only recipes on non-HTTP projects)
+- Cross-cloud validation (rejects AWS recipes with GCP/Azure provider and vice versa)
+- graphql-mercurius + Express rejection
+
+#### Manifest Completeness
+- .spoonfeed.json now records name, scope, httpAdapter, frontendFramework, transportLayer
+- add-recipe reads all manifest fields for template rendering
+
+#### Recipe Package Fragments
+- Generator now loads recipe-level package-fragment.json files (for scripts like docs:dev)
+- add-recipe and remove-recipe handle fragment scripts correctly
+
+### Fixed
+
+#### Generator
+- Base package.json.ejs no longer leaks HTTP adapter devDependencies to non-HTTP project types
+- HTTP-specific base files (exception filter, timeout middleware, e2e test) removed for non-HTTP projects
+- Package.json merger deduplicates cross-section deps (runtime takes precedence over dev)
+- Env merger produces deterministic output (sections sorted alphabetically, shared vars as comments)
+- CLAUDE.md includes project name/scope, correct import alias for workspace projects, and workspace layout info
+- Kubernetes manifests use project name instead of hardcoded "app"
+- Dockerfile and docker-compose handle workspace layouts (full-stack/monorepo)
+
+#### Recipe Definitions
+- 13 HTTP-only recipes restricted from non-HTTP project types (cors, throttler, pagination, filtering, api-versioning, health-checks, opentelemetry, correlation-id, request-logging, csrf, http-caching, distributed-tracing, multi-tenancy)
+- Bidirectional conflict declarations for ORM recipes, s3-minio/aws-s3, rabbitmq/bullmq
+- @nestjs/microservices version fixed in rabbitmq recipe (v10 to v11)
+- @nestjs/websockets and @nestjs/platform-socket.io fixed in websockets recipe (v10 to v11)
+- Non-existent npm versions fixed (@grpc/grpc-js, mqtt)
+- Deprecated conventional-changelog-cli replaced with conventional-changelog
+- AI context Fastify-specific text neutralized in 4 recipes (helmet, cors, csrf, file-upload)
+
+#### Add/Remove Recipe Lifecycle
+- add-recipe respects Express adapter (uses expressDependencies and expressMainTsSetup)
+- add-recipe copies template files and records them in manifest
+- add-recipe loads recipe package-fragment.json for scripts
+- add-recipe deduplicates env vars with shared-with comments
+- add-recipe validates graphql-mercurius + Express
+- add-recipe passes all 7 template data fields to EJS
+- remove-recipe promotes shared env vars when owning recipe is removed
+- remove-recipe removes fragment-contributed scripts
+- remove-recipe protects import specifiers needed by other recipes
+- Multi-line Prettier-formatted imports correctly removed
+
+#### Migrate Recipe
+- Fixed incomplete dependent satisfaction check (now simulates full post-migration set)
+- Schema supports positional args for from/to
+
+#### List Recipes
+- Filters recipes by compatibleWith (incompatible recipes no longer shown as available)
+- JSON output includes description, requires, compatibleWith
+
+#### Post-Generate
+- pnpm install uses --ignore-scripts (supply chain safety)
+- git commit disables GPG signing for initial scaffolding commit
+
+#### Templates
+- EJS blank lines fixed with -%> trimming across 7 template files
+- http-exception.filter unit test converted to adapter-aware EJS
+- prefer-header interceptor uses correct Express API (response.status vs response.code)
+- app.module.ts single-element imports formatted for prettier compliance
+- docs-site recipe: added index.md, guide page, and package-fragment.json with scripts
+- docs-site VitePress config: removed @ prefix from GitHub URLs
+
+### Test Coverage
+- 2114 unit and integration tests
+- 31 integration test suites covering recipe definitions, cross-adapter diffs, non-HTTP projects, cloud providers, frontend frameworks, deployment/CI-CD, max recipe combos, transport layers, scoped names, template rendering, package.json integrity, config validation, default presets, add/remove/migrate lifecycle, and more
+- Deep matrix: every HTTP-compatible recipe tested individually with both Fastify and Express adapters (227 tests)
+- 45 heavy combo generate+install+compile tests across all project types, adapters, transports, and cloud providers
+- 151 npm package versions verified against registry
+- Generated project unit and e2e tests confirmed passing
+
 ## [0.1.1](https://github.com/bbjansen/spoonfeed/compare/spoonfeed-v0.1.0...spoonfeed-v0.1.1) (2026-05-17)
 
 
